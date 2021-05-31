@@ -11,7 +11,7 @@ import org.springframework.data.annotation.Id;
 @AllArgsConstructor
 @Builder
 public class SocialBox {
-    @Id
-    private String id;
-    private String text;
+  @Id
+  private String id;
+  private String text;
 }
