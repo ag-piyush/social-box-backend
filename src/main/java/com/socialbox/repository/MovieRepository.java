@@ -1,6 +1,6 @@
-package com.example.socialboxbackend.repository;
+package com.socialbox.repository;
 
-import com.example.socialboxbackend.model.Movie;
+import com.socialbox.model.Movie;
 import org.springframework.data.mongodb.repository.MongoRepository;
 
 public interface MovieRepository extends MongoRepository<Movie, String> {

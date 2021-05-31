@@ -1,7 +1,7 @@
-package com.example.socialboxbackend.controllers;
+package com.socialbox.controllers;
 
-import com.example.socialboxbackend.model.SocialBox;
-import com.example.socialboxbackend.repository.SocialBoxRepository;
+import com.socialbox.model.SocialBox;
+import com.socialbox.repository.SocialBoxRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
