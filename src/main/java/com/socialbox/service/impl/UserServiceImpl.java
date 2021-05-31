@@ -21,8 +21,12 @@ public class UserServiceImpl implements UserService {
   }
 
   public User getUserById(String id) {
+<<<<<<< HEAD
     Optional<User> userOptional = this.userRepository.findById(id);
     return userOptional.orElse(null);
+=======
+    return this.userRepository.findById(id).get();
+>>>>>>> 9912b23a2462f2bc6e7e12a423ab067fdb78eaa2
   }
 
   public User saveUser(User user) {
