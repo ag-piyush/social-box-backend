@@ -2,6 +2,7 @@ package com.socialbox.controllers;
 
 import com.socialbox.model.SocialBox;
 import com.socialbox.repository.SocialBoxRepository;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -10,6 +11,7 @@ import java.util.List;
 
 @RequestMapping("/api")
 @RestController
+@Slf4j
 public class SocialBoxController {
     private final SocialBoxRepository socialBoxRepository;
 
@@ -21,7 +23,7 @@ public class SocialBoxController {
     @GetMapping
     public List<SocialBox> getSample() {
         List<SocialBox> list = this.socialBoxRepository.findAll();
-        System.out.println(list);
+        log.info("{}", list);
         return list;
     }
 

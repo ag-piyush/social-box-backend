@@ -21,4 +21,5 @@ public class User {
     public List<String> sharedMovieList;
     public HashSet<String> groupsId;
     public String photoURL;
+    public String userEmail;
 }
