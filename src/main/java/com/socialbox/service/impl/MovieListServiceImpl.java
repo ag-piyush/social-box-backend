@@ -4,5 +4,4 @@ import com.socialbox.service.MovieListService;
 import org.springframework.stereotype.Service;
 
 @Service
-public class MovieListServiceImpl implements MovieListService {
-}
+public class MovieListServiceImpl implements MovieListService {}

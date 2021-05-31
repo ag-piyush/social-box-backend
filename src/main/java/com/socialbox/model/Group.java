@@ -14,9 +14,8 @@ import java.util.List;
 @AllArgsConstructor
 @Builder
 public class Group {
-    @Id
-    public String groupId;
-    public String groupName;
-    public List<String> groupMovieList;
-    public HashSet<String> usersId;
+  @Id private String groupId;
+  private String groupName;
+  private List<String> groupMovieList;
+  private HashSet<String> usersId;
 }

@@ -13,9 +13,8 @@ import java.util.List;
 @AllArgsConstructor
 @Builder
 public class Movie {
-    @Id
-    public String movieId;
-    public String movieName;
-    public double movieRating;
-    public List<String> movieReviews;
+  @Id private String movieId;
+  private String movieName;
+  private double movieRating;
+  private List<String> movieReviews;
 }

@@ -1,4 +1,3 @@
 package com.socialbox.service;
 
-public interface MovieService {
-}
+public interface MovieService {}
