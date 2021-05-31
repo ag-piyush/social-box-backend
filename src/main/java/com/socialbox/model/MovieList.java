@@ -12,10 +12,9 @@ import org.springframework.data.annotation.Id;
 @AllArgsConstructor
 @Builder
 public class MovieList {
-  @Id
-  public String listId;
-  public String linkedUserId;
-  public String linkedGroupId;
-  public List<String> moviesId;
-  public List<String> sharedUserIds;
+  @Id private String listId;
+  private String linkedUserId;
+  private String linkedGroupId;
+  private List<String> moviesId;
+  private List<String> sharedUserIds;
 }

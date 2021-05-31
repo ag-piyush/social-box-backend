@@ -1,4 +1,3 @@
 package com.socialbox.controllers;
 
-public class GroupController {
-}
+public class GroupController {}
