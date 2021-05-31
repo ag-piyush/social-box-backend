@@ -1,4 +1,3 @@
 package com.socialbox.service;
 
-public interface GroupService {
-}
+public interface GroupService {}
