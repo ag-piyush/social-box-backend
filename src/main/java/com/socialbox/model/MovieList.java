@@ -1,4 +1,4 @@
-package com.example.socialboxbackend.model;
+package com.socialbox.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -12,10 +12,11 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class Movie {
+public class MovieList {
     @Id
-    public String movieId;
-    public String movieName;
-    public double movieRating;
-    public List<String> movieReviews;
+    public String listId;
+    public String linkedUserId;
+    public String linkedGroupId;
+    public List<String> moviesId;
+    public List<String> sharedUserIds;
 }

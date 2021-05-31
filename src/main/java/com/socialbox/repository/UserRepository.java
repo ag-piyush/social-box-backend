@@ -1,6 +1,6 @@
-package com.example.socialboxbackend.repository;
+package com.socialbox.repository;
 
-import com.example.socialboxbackend.model.User;
+import com.socialbox.model.User;
 import org.springframework.data.mongodb.repository.MongoRepository;
 
 public interface UserRepository extends MongoRepository<User, String> {

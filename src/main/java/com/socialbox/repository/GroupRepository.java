@@ -1,6 +1,6 @@
-package com.example.socialboxbackend.repository;
+package com.socialbox.repository;
 
-import com.example.socialboxbackend.model.Group;
+import com.socialbox.model.Group;
 import org.springframework.data.mongodb.repository.MongoRepository;
 
 public interface GroupRepository extends MongoRepository<Group, String> {
