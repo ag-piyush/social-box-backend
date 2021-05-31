@@ -1,4 +1,4 @@
-package com.example.socialboxbackend.model;
+package com.socialbox.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

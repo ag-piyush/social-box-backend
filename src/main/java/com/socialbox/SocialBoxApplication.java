@@ -1,13 +1,13 @@
-package com.example.socialboxbackend;
+package com.socialbox;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class SocialBoxBackendApplication {
+public class SocialBoxApplication {
 
     public static void main(String[] args) {
-        SpringApplication.run(SocialBoxBackendApplication.class, args);
+        SpringApplication.run(SocialBoxApplication.class, args);
     }
 
 }
