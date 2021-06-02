@@ -18,4 +18,7 @@ public class Group {
   private String groupName;
   private List<String> groupMovieList;
   private HashSet<String> usersId;
+  private int memberCount;
+  private String groupPhotoURL;
+  private String groupAdminId;
 }
