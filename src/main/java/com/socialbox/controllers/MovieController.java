@@ -12,25 +12,25 @@ import java.util.List;
 @RestController
 public class MovieController {
 
-    private final MovieService movieService;
+  private final MovieService movieService;
 
-    @Autowired
-    public MovieController(MovieService movieService){
-        this.movieService = movieService;
-    }
+  @Autowired
+  public MovieController(MovieService movieService) {
+    this.movieService = movieService;
+  }
 
-    @GetMapping
-    public List<MovieDTO> getAllMovies(){
-        return this.movieService.getAllMovies();
-    }
+  @GetMapping
+  public List<MovieDTO> getAllMovies() {
+    return this.movieService.getAllMovies();
+  }
 
-    @GetMapping("/{id}")
-    public Movie getMovie(@PathVariable("id") String id){
-        return this.movieService.getMovie(id);
-    }
+  @GetMapping("/{id}")
+  public Movie getMovie(@PathVariable("id") String id) {
+    return this.movieService.getMovie(id);
+  }
 
-    @PostMapping
-    public Movie saveMovie(@RequestBody Movie movie){
-        return this.movieService.saveMovie(movie);
-    }
+  @PostMapping
+  public Movie saveMovie(@RequestBody Movie movie) {
+    return this.movieService.saveMovie(movie);
+  }
 }
