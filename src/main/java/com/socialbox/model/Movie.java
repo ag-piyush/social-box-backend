@@ -17,4 +17,5 @@ public class Movie {
   private String movieName;
   private double movieRating;
   private List<String> movieReviews;
+  private String moviePhotoURL;
 }
