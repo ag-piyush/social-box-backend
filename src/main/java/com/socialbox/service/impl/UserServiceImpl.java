@@ -17,15 +17,18 @@ public class UserServiceImpl implements UserService {
     this.userRepository = userRepository;
   }
 
+  @Override
   public List<User> getAllUsers() {
     return this.userRepository.findAll();
   }
 
+  @Override
   public User getUserById(String id) {
     Optional<User> userOptional = this.userRepository.findById(id);
     return userOptional.orElse(null);
   }
 
+  @Override
   public User saveUser(User user) {
     return this.userRepository.save(user);
   }
