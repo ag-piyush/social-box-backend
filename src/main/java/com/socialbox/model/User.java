@@ -19,6 +19,6 @@ public class User {
   private List<String> personalMovieList;
   private List<String> sharedMovieList;
   private HashSet<String> groupsId;
-  private String photoURL;
+  private String userPhotoURL;
   private String userEmail;
 }
