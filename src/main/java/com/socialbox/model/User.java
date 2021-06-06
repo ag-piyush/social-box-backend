@@ -16,6 +16,7 @@ import java.util.List;
 public class User {
   @Id private String userId;
   private String userName;
+  private String userPassword;
   private List<String> personalMovieList;
   private List<String> sharedMovieList;
   private HashSet<String> groupsId;
