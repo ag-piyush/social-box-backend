@@ -7,11 +7,11 @@ import java.util.List;
 
 public interface MovieService {
 
-    List<MovieDTO> getAllMovies();
+  List<MovieDTO> getAllMovies();
 
-    List<Movie> getMoviesByIds(List<String> movieIds);
+  List<Movie> getMoviesByIds(List<String> movieIds);
 
-    Movie getMovie(String id);
+  Movie getMovie(String id);
 
-    Movie saveMovie(Movie movie);
+  Movie saveMovie(Movie movie);
 }
