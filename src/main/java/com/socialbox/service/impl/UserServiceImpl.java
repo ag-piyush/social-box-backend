@@ -30,6 +30,12 @@ public class UserServiceImpl implements UserService {
 
   @Override
   public User saveUser(User user) {
-    return this.userRepository.save(user);
+
+    User existingUser = this.userRepository.findByUserEmail(user.getUserEmail());
+
+    if(existingUser != null && user.getUserPassword().equals(existingUser.getUserPassword()))
+      this.userRepository.save(existingUser);
+
+    return null;
   }
 }
