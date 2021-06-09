@@ -8,6 +8,7 @@ import com.socialbox.repository.GroupRepository;
 import com.socialbox.repository.UserRepository;
 import com.socialbox.service.GroupService;
 import com.socialbox.service.UserService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -21,6 +22,7 @@ public class GroupServiceImpl implements GroupService {
   private final GroupRepository groupRepository;
   private final UserService userService;
 
+  @Autowired
   public GroupServiceImpl(GroupRepository groupRepository, UserService userService) {
     this.groupRepository = groupRepository;
     this.userService = userService;

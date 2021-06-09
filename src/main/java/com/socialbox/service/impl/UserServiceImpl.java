@@ -4,6 +4,7 @@ import com.socialbox.model.User;
 import com.socialbox.repository.UserRepository;
 import com.socialbox.service.UserService;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -15,6 +16,7 @@ public class UserServiceImpl implements UserService {
 
   private final UserRepository userRepository;
 
+  @Autowired
   public UserServiceImpl(UserRepository userRepository) {
     this.userRepository = userRepository;
   }
@@ -42,7 +44,7 @@ public class UserServiceImpl implements UserService {
 
     if(existingUser != null && user.getUserPassword().equals(existingUser.getUserPassword())) {
       log.info("User authenticated.");
-      this.userRepository.save(existingUser);
+      return this.userRepository.save(existingUser);
     }
 
     log.error("Login credentials incorrect.");
