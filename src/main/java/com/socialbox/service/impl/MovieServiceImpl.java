@@ -8,6 +8,7 @@ import com.socialbox.service.MovieService;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -15,6 +16,7 @@ public class MovieServiceImpl implements MovieService {
 
   private final MovieRepository movieRepository;
 
+  @Autowired
   public MovieServiceImpl(MovieRepository movieRepository) {
     this.movieRepository = movieRepository;
   }
