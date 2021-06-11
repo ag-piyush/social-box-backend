@@ -20,7 +20,7 @@ public class GroupController {
   }
 
   @GetMapping
-  public List<GroupDTO> getAllGroups(@RequestParam List<String> ids) {
+  public List<GroupDTO> getGroups(@RequestParam("ids") List<String> ids) {
     return this.groupService.getAllGroups(ids);
   }
 

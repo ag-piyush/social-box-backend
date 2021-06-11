@@ -59,7 +59,7 @@ public class GroupServiceImpl implements GroupService {
 
   @Override
   public Group setAdmin(Group group) {
-    Group currentGroup = this.saveGroup(group);
+    Group currentGroup = this.groupRepository.save(group);
 
     User currentUser = this.userService.getUserById(currentGroup.getGroupAdminId());
     if (currentUser.getGroupsId() == null) currentUser.setGroupsId(new HashSet<>());
