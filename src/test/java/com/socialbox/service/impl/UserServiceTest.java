@@ -3,8 +3,8 @@ package com.socialbox.service.impl;
 import com.google.common.collect.Lists;
 import com.socialbox.model.User;
 import com.socialbox.repository.UserRepository;
+import com.socialbox.service.MovieService;
 import com.socialbox.service.UserService;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import org.junit.jupiter.api.Assertions;
@@ -19,11 +19,12 @@ import org.mockito.junit.jupiter.MockitoExtension;
 class UserServiceTest {
 
   @Mock UserRepository userRepository;
+  MovieService movieService;
   UserService userService;
 
   @BeforeEach
   void setUp() {
-    userService = new UserServiceImpl(userRepository);
+    userService = new UserServiceImpl(userRepository, movieService);
   }
 
   @Test
