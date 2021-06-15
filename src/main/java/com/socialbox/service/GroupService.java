@@ -12,5 +12,5 @@ public interface GroupService {
 
   Group saveGroup(Group group);
 
-  Group setAdmin(Group group);
+  Group createGroup(Group group);
 }

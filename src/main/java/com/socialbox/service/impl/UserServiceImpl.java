@@ -42,7 +42,7 @@ public class UserServiceImpl implements UserService {
     User existingUser = this.userRepository.findByUserEmail(user.getUserEmail());
     log.info("User found: {}", existingUser);
 
-    if(existingUser != null && user.getUserPassword().equals(existingUser.getUserPassword())) {
+    if (existingUser != null && user.getUserPassword().equals(existingUser.getUserPassword())) {
       log.info("User authenticated.");
       return this.userRepository.save(existingUser);
     }

@@ -5,7 +5,6 @@ import com.socialbox.dto.GroupDTO;
 import com.socialbox.model.Group;
 import com.socialbox.model.User;
 import com.socialbox.repository.GroupRepository;
-import com.socialbox.repository.UserRepository;
 import com.socialbox.service.GroupService;
 import com.socialbox.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -58,7 +57,7 @@ public class GroupServiceImpl implements GroupService {
   }
 
   @Override
-  public Group setAdmin(Group group) {
+  public Group createGroup(Group group) {
     Group currentGroup = this.groupRepository.save(group);
 
     User currentUser = this.userService.getUserById(currentGroup.getGroupAdminId());
