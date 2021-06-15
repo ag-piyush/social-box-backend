@@ -1,5 +1,6 @@
 package com.socialbox.service.impl;
 
+import com.socialbox.dto.UserMovieDTO;
 import com.socialbox.model.User;
 import com.socialbox.repository.UserRepository;
 import com.socialbox.service.UserService;
@@ -7,6 +8,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -49,5 +51,16 @@ public class UserServiceImpl implements UserService {
 
     log.error("Login credentials incorrect.");
     return null;
+  }
+
+  @Override
+  public List<UserMovieDTO> getMovies(String id) {
+    Optional<User> userOptional = this.userRepository.findById(id);
+    User currentUser = userOptional.orElse(null);
+
+    if(currentUser == null)
+      return (new ArrayList<>());
+
+    return currentUser.getPersonalMovieList();
   }
 }
