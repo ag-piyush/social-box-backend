@@ -16,7 +16,7 @@ import java.util.List;
 public class Group {
   @Id private String groupId;
   private String groupName;
-  private List<String> groupMovieList;
+  private List<GroupMovie> groupMovieList;
   private HashSet<String> usersId;
   private int memberCount;
   private String groupPhotoURL;
