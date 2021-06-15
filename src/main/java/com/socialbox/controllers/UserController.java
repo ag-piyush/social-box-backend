@@ -39,8 +39,7 @@ public class UserController {
 
     User createdUser = this.userService.saveUser(user);
 
-    if(createdUser == null)
-      return ResponseEntity.status(401).build();
+    if (createdUser == null) return ResponseEntity.status(401).build();
 
     return ResponseEntity.ok(createdUser);
   }

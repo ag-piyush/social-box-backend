@@ -31,6 +31,6 @@ public class GroupController {
 
   @PostMapping
   public Group saveGroup(@RequestBody Group group) {
-    return this.groupService.setAdmin(group);
+    return this.groupService.createGroup(group);
   }
 }

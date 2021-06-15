@@ -28,8 +28,7 @@ class UserServiceTest {
 
   @Test
   void testGetAllUsers() {
-    List<User> users = Lists.newArrayList(
-        getUser());
+    List<User> users = Lists.newArrayList(getUser());
 
     Mockito.when(userRepository.findAll()).thenReturn(users);
 
