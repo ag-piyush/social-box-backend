@@ -3,6 +3,7 @@ package com.socialbox.service.impl;
 import com.google.common.collect.Lists;
 import com.socialbox.dto.GroupDTO;
 import com.socialbox.model.Group;
+import com.socialbox.model.GroupMovie;
 import com.socialbox.model.User;
 import com.socialbox.repository.GroupRepository;
 import com.socialbox.service.GroupService;
@@ -71,5 +72,27 @@ public class GroupServiceImpl implements GroupService {
     this.groupRepository.save(currentGroup);
 
     return currentGroup;
+  }
+
+  @Override
+  public List<GroupMovie> saveMovie(List<GroupMovie> groupMovies) {
+
+    for(GroupMovie movie : groupMovies){
+      String groupId = movie.getGroupId();
+      Optional<Group> groupOptional = this.groupRepository.findById(groupId);
+      Group currentGroup = groupOptional.orElse(null);
+
+      if(currentGroup==null)
+        continue;
+
+      if(currentGroup.getGroupMovieList() == null)
+        currentGroup.setGroupMovieList(new ArrayList<>());
+
+      currentGroup.getGroupMovieList().add(movie);
+
+      saveGroup(currentGroup);
+    }
+
+    return groupMovies;
   }
 }

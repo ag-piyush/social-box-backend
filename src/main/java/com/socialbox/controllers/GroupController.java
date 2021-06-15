@@ -2,6 +2,7 @@ package com.socialbox.controllers;
 
 import com.socialbox.dto.GroupDTO;
 import com.socialbox.model.Group;
+import com.socialbox.model.GroupMovie;
 import com.socialbox.service.GroupService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -32,5 +33,10 @@ public class GroupController {
   @PostMapping
   public Group saveGroup(@RequestBody Group group) {
     return this.groupService.createGroup(group);
+  }
+
+  @PostMapping
+  public List<GroupMovie> addGroupMovie(@RequestBody List<GroupMovie> groupMovies){
+    return this.groupService.saveMovie(groupMovies);
   }
 }
