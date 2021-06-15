@@ -1,10 +1,10 @@
 package com.socialbox.controllers;
 
+import com.socialbox.dto.UserMovieDTO;
 import com.socialbox.model.User;
 import com.socialbox.service.UserService;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -42,5 +42,10 @@ public class UserController {
     if (createdUser == null) return ResponseEntity.status(401).build();
 
     return ResponseEntity.ok(createdUser);
+  }
+
+  @GetMapping("/{id}/movies")
+  public List<UserMovieDTO> getMovies(@PathVariable("id") String id){
+    return this.userService.getMovies(id);
   }
 }

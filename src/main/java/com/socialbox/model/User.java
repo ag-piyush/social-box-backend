@@ -1,5 +1,6 @@
 package com.socialbox.model;
 
+import com.socialbox.dto.UserMovieDTO;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -17,7 +18,7 @@ public class User {
   @Id private String userId;
   private String userName;
   private String userPassword;
-  private List<String> personalMovieList;
+  private List<UserMovieDTO> personalMovieList;
   private List<String> sharedMovieList;
   private HashSet<String> groupsId;
   private String userPhotoURL;
