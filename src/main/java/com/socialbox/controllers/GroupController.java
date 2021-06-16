@@ -35,7 +35,7 @@ public class GroupController {
     return this.groupService.createGroup(group);
   }
 
-  @PostMapping
+  @PostMapping("/movie")
   public List<GroupMovie> addGroupMovie(@RequestBody List<GroupMovie> groupMovies){
     return this.groupService.saveMovie(groupMovies);
   }
