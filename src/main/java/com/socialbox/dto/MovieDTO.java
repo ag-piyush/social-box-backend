@@ -10,8 +10,8 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Builder
 public class MovieDTO {
-  private String movieId;
-  private String movieName;
-  private String moviePhotoURL;
+  private String id;
+  private String name;
+  private String photoURL;
   private double movieRating;
 }
