@@ -30,8 +30,13 @@ public class UserController {
   }
 
   @GetMapping("/{id}")
-  public User getUserById(@PathVariable("id") String id) {
-    return this.userService.getUserById(id);
+  public ResponseEntity<User> getUserById(@PathVariable("id") String id) {
+
+    User foundUser = this.userService.getUserById(id);
+
+    if (foundUser == null) return ResponseEntity.status(401).build();
+
+    return ResponseEntity.ok(foundUser);
   }
 
   @PostMapping
@@ -45,7 +50,12 @@ public class UserController {
   }
 
   @GetMapping("/{id}/movies")
-  public List<UserMovieDTO> getMovies(@PathVariable("id") String id){
-    return this.userService.getMovies(id);
+  public ResponseEntity<List<UserMovieDTO>> getMovies(@PathVariable("id") String id) {
+
+    List<UserMovieDTO> movieDTOS = this.userService.getMovies(id);
+
+    if (movieDTOS == null) return ResponseEntity.status(401).build();
+
+    return ResponseEntity.ok(movieDTOS);
   }
 }

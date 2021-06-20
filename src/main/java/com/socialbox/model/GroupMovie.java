@@ -11,11 +11,10 @@ import org.springframework.data.annotation.Id;
 @AllArgsConstructor
 @Builder
 public class GroupMovie {
-    @Id
-    private String id;
-    private String groupId;
-    private String name;
-    private String photoURL;
-    private double rating;
-    private int votes;
+  @Id private String id;
+  private String groupId;
+  private String name;
+  private String photoURL;
+  private double rating;
+  private int votes;
 }

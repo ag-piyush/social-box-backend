@@ -77,15 +77,14 @@ public class GroupServiceImpl implements GroupService {
   @Override
   public List<GroupMovie> saveMovie(List<GroupMovie> groupMovies) {
 
-    for(GroupMovie movie : groupMovies){
+    for (GroupMovie movie : groupMovies) {
       String groupId = movie.getGroupId();
       Optional<Group> groupOptional = this.groupRepository.findById(groupId);
       Group currentGroup = groupOptional.orElse(null);
 
-      if(currentGroup==null)
-        continue;
+      if (currentGroup == null) continue;
 
-      if(currentGroup.getGroupMovieList() == null)
+      if (currentGroup.getGroupMovieList() == null)
         currentGroup.setGroupMovieList(new ArrayList<>());
 
       currentGroup.getGroupMovieList().add(movie);
