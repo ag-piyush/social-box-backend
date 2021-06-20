@@ -13,7 +13,7 @@ import java.util.List;
 @AllArgsConstructor
 @Builder
 public class MovieList {
-  @Id private String listId;
+  @Id private String id;
   private String linkedUserId;
   private String linkedGroupId;
   private List<String> moviesId;

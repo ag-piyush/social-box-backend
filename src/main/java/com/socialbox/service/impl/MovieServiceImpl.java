@@ -29,9 +29,9 @@ public class MovieServiceImpl implements MovieService {
     for (Movie movie : movieList) {
       MovieDTO movieDTO =
           MovieDTO.builder()
-              .movieId(movie.getMovieId())
-              .movieName(movie.getMovieName())
-              .movieRating(movie.getMovieRating())
+              .movieId(movie.getId())
+              .movieName(movie.getName())
+              .movieRating(movie.getRating())
               .build();
       movieDTOList.add(movieDTO);
     }

@@ -45,10 +45,10 @@ public class UserServiceImpl implements UserService {
 
   @Override
   public User saveUser(User user) {
-    User existingUser = this.userRepository.findByUserEmail(user.getUserEmail());
+    User existingUser = this.userRepository.findByUserEmail(user.getEmail());
     log.info("User found: {}", existingUser);
 
-    if (existingUser != null && user.getUserPassword().equals(existingUser.getUserPassword())) {
+    if (existingUser != null && user.getPassword().equals(existingUser.getPassword())) {
       log.info("User authenticated.");
       return this.userRepository.save(existingUser);
     }
@@ -74,10 +74,10 @@ public class UserServiceImpl implements UserService {
       UserMovieDTO movieDTO =
           UserMovieDTO.builder()
               .userId(id)
-              .id(movie.getMovieId())
-              .name(movie.getMovieName())
-              .photoURL(movie.getMoviePhotoURL())
-              .rating(movie.getMovieRating())
+              .id(movie.getId())
+              .name(movie.getName())
+              .photoURL(movie.getPhotoURL())
+              .rating(movie.getRating())
               .userRating(5) // Todo: Change User Ratings
               .votes(movie.getVotes())
               .build();

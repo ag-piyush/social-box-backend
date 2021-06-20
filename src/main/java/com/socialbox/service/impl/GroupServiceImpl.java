@@ -38,9 +38,9 @@ public class GroupServiceImpl implements GroupService {
     for (Group group : groupList) {
       GroupDTO groupDTO =
           GroupDTO.builder()
-              .groupId(group.getGroupId())
-              .groupName(group.getGroupName())
-              .groupPhotoURL(group.getGroupPhotoURL())
+              .groupId(group.getId())
+              .groupName(group.getName())
+              .groupPhotoURL(group.getPhotoURL())
               .memberCount(group.getMemberCount())
               .build();
       groupDTOList.add(groupDTO);
@@ -63,13 +63,13 @@ public class GroupServiceImpl implements GroupService {
   public Group createGroup(Group group) {
     Group currentGroup = this.groupRepository.save(group);
 
-    User currentUser = this.userService.getUserById(currentGroup.getGroupAdminId());
+    User currentUser = this.userService.getUserById(currentGroup.getAdminId());
     if (currentUser.getGroupsId() == null) {
       log.info("No previous groups!");
       currentUser.setGroupsId(new HashSet<>());
     }
 
-    currentUser.getGroupsId().add(currentGroup.getGroupId());
+    currentUser.getGroupsId().add(currentGroup.getId());
     log.info("Group added!");
     this.userService.saveUser(currentUser);
 
@@ -92,11 +92,11 @@ public class GroupServiceImpl implements GroupService {
         continue;
       }
 
-      if (currentGroup.getGroupMovieList() == null) {
+      if (currentGroup.getMovieList() == null) {
         log.info("Empty movie list in group!");
-        currentGroup.setGroupMovieList(new ArrayList<>());
+        currentGroup.setMovieList(new ArrayList<>());
       }
-      currentGroup.getGroupMovieList().add(movie);
+      currentGroup.getMovieList().add(movie);
       log.info("Movie added to group: {}", movie);
       saveGroup(currentGroup);
     }
