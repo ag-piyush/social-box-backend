@@ -14,11 +14,11 @@ import java.util.List;
 @AllArgsConstructor
 @Builder
 public class Group {
-  @Id private String groupId;
-  private String groupName;
-  private List<GroupMovie> groupMovieList;
+  @Id private String id;
+  private String name;
+  private List<GroupMovie> movieList;
   private HashSet<String> usersId;
   private int memberCount;
-  private String groupPhotoURL;
-  private String groupAdminId;
+  private String photoURL;
+  private String adminId;
 }

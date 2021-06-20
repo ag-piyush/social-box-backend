@@ -68,7 +68,7 @@ class UserServiceTest {
   void testSaveUser_WhenUserFound() {
     User user = getUser();
 
-    Mockito.when(userRepository.findByUserEmail(user.getUserEmail())).thenReturn(user);
+    Mockito.when(userRepository.findByUserEmail(user.getEmail())).thenReturn(user);
     Mockito.when(userRepository.save(user)).thenReturn(user);
 
     User actualUser = userService.saveUser(user);
@@ -80,13 +80,13 @@ class UserServiceTest {
   void testSaveUser_WhenUserNotFound() {
     User user = getUser();
 
-    Mockito.when(userRepository.findByUserEmail(user.getUserEmail())).thenReturn(null);
+    Mockito.when(userRepository.findByUserEmail(user.getEmail())).thenReturn(null);
 
     User actualUser = userService.saveUser(user);
     Assertions.assertNull(actualUser);
   }
 
   private User getUser() {
-    return User.builder().userId("userId").userEmail("userMail").userPassword("passWord").build();
+    return User.builder().id("userId").email("userMail").password("passWord").build();
   }
 }

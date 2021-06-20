@@ -14,12 +14,13 @@ import java.util.List;
 @AllArgsConstructor
 @Builder
 public class User {
-  @Id private String userId;
-  private String userName;
-  private String userPassword;
+  @Id private String id;
+  private String name;
+  private String password;
   private List<String> personalMovieList;
   private List<String> sharedMovieList;
   private HashSet<String> groupsId;
-  private String userPhotoURL;
-  private String userEmail;
+  private String photoURL;
+  private String email;
+  private String username;
 }
