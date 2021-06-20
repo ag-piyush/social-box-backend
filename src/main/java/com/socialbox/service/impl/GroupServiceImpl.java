@@ -8,6 +8,7 @@ import com.socialbox.model.User;
 import com.socialbox.repository.GroupRepository;
 import com.socialbox.service.GroupService;
 import com.socialbox.service.UserService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -17,6 +18,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
+@Slf4j
 public class GroupServiceImpl implements GroupService {
 
   private final GroupRepository groupRepository;
@@ -62,10 +64,13 @@ public class GroupServiceImpl implements GroupService {
     Group currentGroup = this.groupRepository.save(group);
 
     User currentUser = this.userService.getUserById(currentGroup.getGroupAdminId());
-    if (currentUser.getGroupsId() == null) currentUser.setGroupsId(new HashSet<>());
+    if (currentUser.getGroupsId() == null) {
+      log.info("No previous groups!");
+      currentUser.setGroupsId(new HashSet<>());
+    }
 
     currentUser.getGroupsId().add(currentGroup.getGroupId());
-
+    log.info("Group added!");
     this.userService.saveUser(currentUser);
 
     currentGroup.setMemberCount(1);
@@ -82,13 +87,17 @@ public class GroupServiceImpl implements GroupService {
       Optional<Group> groupOptional = this.groupRepository.findById(groupId);
       Group currentGroup = groupOptional.orElse(null);
 
-      if (currentGroup == null) continue;
+      if (currentGroup == null) {
+        log.info("Group not found");
+        continue;
+      }
 
-      if (currentGroup.getGroupMovieList() == null)
+      if (currentGroup.getGroupMovieList() == null) {
+        log.info("Empty movie list in group!");
         currentGroup.setGroupMovieList(new ArrayList<>());
-
+      }
       currentGroup.getGroupMovieList().add(movie);
-
+      log.info("Movie added to group: {}", movie);
       saveGroup(currentGroup);
     }
 
