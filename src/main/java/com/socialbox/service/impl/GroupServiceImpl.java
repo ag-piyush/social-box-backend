@@ -38,9 +38,9 @@ public class GroupServiceImpl implements GroupService {
     for (Group group : groupList) {
       GroupDTO groupDTO =
           GroupDTO.builder()
-              .groupId(group.getId())
-              .groupName(group.getName())
-              .groupPhotoURL(group.getPhotoURL())
+              .id(group.getId())
+              .name(group.getName())
+              .photoURL(group.getPhotoURL())
               .memberCount(group.getMemberCount())
               .build();
       groupDTOList.add(groupDTO);

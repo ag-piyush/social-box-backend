@@ -10,8 +10,8 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Builder
 public class GroupDTO {
-  private String groupId;
-  private String groupName;
-  private String groupPhotoURL;
+  private String id;
+  private String name;
+  private String photoURL;
   private int memberCount;
 }

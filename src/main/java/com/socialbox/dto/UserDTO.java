@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Builder
 public class UserDTO {
-  private String userId;
-  private String userName;
-  private String userPhotoURL;
+  private String id;
+  private String name;
+  private String photoURL;
 }
