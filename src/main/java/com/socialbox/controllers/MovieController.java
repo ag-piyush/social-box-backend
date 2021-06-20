@@ -4,6 +4,7 @@ import com.socialbox.dto.MovieDTO;
 import com.socialbox.model.Movie;
 import com.socialbox.service.MovieService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -25,8 +26,13 @@ public class MovieController {
   }
 
   @GetMapping("/{id}")
-  public Movie getMovie(@PathVariable("id") String id) {
-    return this.movieService.getMovie(id);
+  public ResponseEntity<Movie> getMovie(@PathVariable("id") String id) {
+
+    Movie foundMovie = this.movieService.getMovie(id);
+
+    if (foundMovie == null) return ResponseEntity.status(401).build();
+
+    return ResponseEntity.ok(foundMovie);
   }
 
   @PostMapping

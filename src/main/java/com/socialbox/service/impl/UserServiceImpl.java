@@ -62,20 +62,23 @@ public class UserServiceImpl implements UserService {
     Optional<User> userOptional = this.userRepository.findById(id);
     User currentUser = userOptional.orElse(null);
 
-    if(currentUser == null)
-      return (new ArrayList<>());
+    if (currentUser == null) {
+      log.error("User not found.");
+      return null;
+    }
 
-    List<Movie> movieList =  this.movieService.getMoviesByIds(currentUser.getPersonalMovieList());
+    List<Movie> movieList = this.movieService.getMoviesByIds(currentUser.getPersonalMovieList());
     List<UserMovieDTO> movieDTOS = new ArrayList<>();
 
-    for(Movie movie : movieList){
-      UserMovieDTO movieDTO = UserMovieDTO.builder()
+    for (Movie movie : movieList) {
+      UserMovieDTO movieDTO =
+          UserMovieDTO.builder()
               .userId(id)
               .id(movie.getMovieId())
               .name(movie.getMovieName())
               .photoURL(movie.getMoviePhotoURL())
               .rating(movie.getMovieRating())
-              .userRating(5) //Todo: Change User Ratings
+              .userRating(5) // Todo: Change User Ratings
               .votes(movie.getVotes())
               .build();
 

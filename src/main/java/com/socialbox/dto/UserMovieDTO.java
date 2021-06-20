@@ -11,12 +11,11 @@ import org.springframework.data.annotation.Id;
 @AllArgsConstructor
 @Builder
 public class UserMovieDTO {
-    @Id
-    private String id;
-    private String userId;
-    private String name;
-    private String photoURL;
-    private double rating;
-    private double userRating;
-    private int votes;
+  @Id private String id;
+  private String userId;
+  private String name;
+  private String photoURL;
+  private double rating;
+  private double userRating;
+  private int votes;
 }

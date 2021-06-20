@@ -5,6 +5,7 @@ import com.socialbox.model.Group;
 import com.socialbox.model.GroupMovie;
 import com.socialbox.service.GroupService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -26,8 +27,13 @@ public class GroupController {
   }
 
   @GetMapping("/{id}")
-  public Group getGroup(@PathVariable("id") String id) {
-    return this.groupService.getGroup(id);
+  public ResponseEntity<Group> getGroup(@PathVariable("id") String id) {
+
+    Group foundGroup = this.groupService.getGroup(id);
+
+    if (foundGroup == null) return ResponseEntity.status(401).build();
+
+    return ResponseEntity.ok(foundGroup);
   }
 
   @PostMapping
@@ -36,7 +42,7 @@ public class GroupController {
   }
 
   @PostMapping("/movie")
-  public List<GroupMovie> addGroupMovie(@RequestBody List<GroupMovie> groupMovies){
+  public List<GroupMovie> addGroupMovie(@RequestBody List<GroupMovie> groupMovies) {
     return this.groupService.saveMovie(groupMovies);
   }
 }
