@@ -8,5 +8,5 @@ import org.springframework.context.annotation.Configuration;
 @ConfigurationProperties(prefix = "api")
 @Data
 public class TmdbConfig {
-    private String key;
+  private String key;
 }

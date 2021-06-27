@@ -45,7 +45,7 @@ public class UserServiceImpl implements UserService {
 
   @Override
   public User saveUser(User user) {
-    User existingUser = this.userRepository.findByUserEmail(user.getEmail());
+    User existingUser = this.userRepository.findByEmail(user.getEmail());
     log.info("User found: {}", existingUser);
 
     if (existingUser != null && user.getPassword().equals(existingUser.getPassword())) {

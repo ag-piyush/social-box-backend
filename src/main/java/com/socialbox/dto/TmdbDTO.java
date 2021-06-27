@@ -13,8 +13,8 @@ import java.util.List;
 @AllArgsConstructor
 @Builder
 public class TmdbDTO {
-    private Integer page;
-    private List<Tmdb> results;
-    private Integer total_pages;
-    private Integer total_results;
+  private Integer page;
+  private List<Tmdb> results;
+  private Integer total_pages;
+  private Integer total_results;
 }
