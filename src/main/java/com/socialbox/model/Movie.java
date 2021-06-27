@@ -19,4 +19,5 @@ public class Movie {
   private List<String> reviews;
   private String photoURL;
   private int votes;
+  private String tmdbId;
 }

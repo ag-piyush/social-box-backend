@@ -39,4 +39,9 @@ public class MovieController {
   public Movie saveMovie(@RequestBody Movie movie) {
     return this.movieService.saveMovie(movie);
   }
+
+  @GetMapping("/search")
+  public List<Movie> searchMovie(@RequestParam String name){
+    return this.movieService.searchMovie(name);
+  }
 }

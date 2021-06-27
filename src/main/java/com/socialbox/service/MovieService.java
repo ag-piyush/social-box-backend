@@ -14,4 +14,6 @@ public interface MovieService {
   Movie getMovie(String id);
 
   Movie saveMovie(Movie movie);
+
+  List<Movie> searchMovie(String name);
 }
