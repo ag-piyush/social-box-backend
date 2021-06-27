@@ -10,11 +10,14 @@ import java.util.List;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.reactive.function.client.WebClient;
+import org.springframework.web.reactive.function.client.WebClientExtensionsKt;
 
 @Service
 public class MovieServiceImpl implements MovieService {
 
   private final MovieRepository movieRepository;
+
 
   @Autowired
   public MovieServiceImpl(MovieRepository movieRepository) {
@@ -52,5 +55,10 @@ public class MovieServiceImpl implements MovieService {
   @Override
   public Movie saveMovie(Movie movie) {
     return this.movieRepository.save(movie);
+  }
+
+  @Override
+  public List<Movie> searchMovie(String name) {
+    return null;
   }
 }
