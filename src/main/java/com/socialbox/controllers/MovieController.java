@@ -41,7 +41,7 @@ public class MovieController {
   }
 
   @GetMapping("/search")
-  public List<Movie> searchMovie(@RequestParam String name){
+  public List<Movie> searchMovie(@RequestParam String name) {
     return this.movieService.searchMovie(name);
   }
 }
