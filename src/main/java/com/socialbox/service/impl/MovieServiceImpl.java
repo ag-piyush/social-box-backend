@@ -14,7 +14,12 @@ import java.util.Optional;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.web.client.RestTemplateBuilder;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
 import org.springframework.web.reactive.function.client.WebClient;
 
 @Service
@@ -65,16 +70,16 @@ public class MovieServiceImpl implements MovieService {
 
   @Override
   public List<Movie> searchMovie(String name) {
-    WebClient webClient = WebClient.create("https://api.themoviedb.org/3");
-    String url = "search/movie?api_key=" + tmdbConfig.getKey() + "&query=" + name;
-    TmdbDTO tmdbDTO = webClient.get().uri(url).retrieve().bodyToMono(TmdbDTO.class).block();
+    String url = tmdbConfig.getBaseUrl() + "/search/movie?api_key=" + tmdbConfig.getKey() + "&query=" + name;
+    RestTemplate restTemplate = new RestTemplate();
+    ResponseEntity<TmdbDTO> tmdbDTOResponseEntity = restTemplate.exchange(url, HttpMethod.GET, new HttpEntity<>(null, null), TmdbDTO.class);
 
-    if (tmdbDTO == null) {
-      log.info("No movie found!");
-      return null;
+    if (tmdbDTOResponseEntity.getBody() == null) {
+      log.debug("No movie found, status: {}", tmdbDTOResponseEntity.getStatusCodeValue());
+      return new ArrayList<>();
     }
 
-    List<Tmdb> results = tmdbDTO.getResults();
+    List<Tmdb> results = tmdbDTOResponseEntity.getBody().getResults();
     List<Movie> movieList = new ArrayList<>();
 
     for (Tmdb tmdb : results) {
@@ -84,6 +89,7 @@ public class MovieServiceImpl implements MovieService {
               .photoURL(tmdb.getPoster_path())
               .rating(tmdb.getVote_average())
               .votes(tmdb.getVote_count())
+              .reviews(new ArrayList<>())
               .tmdbId(tmdb.getId())
               .build();
 
