@@ -11,6 +11,8 @@ public interface UserService {
 
   User getUserById(String id);
 
+  User loginUser(User user);
+
   User saveUser(User user);
 
   List<UserMovieDTO> getMovies(String id);
