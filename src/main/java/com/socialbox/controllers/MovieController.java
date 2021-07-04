@@ -1,18 +1,16 @@
 package com.socialbox.controllers;
 
-import com.socialbox.dto.GroupDTO;
 import com.socialbox.dto.MovieDTO;
 import com.socialbox.model.Movie;
 import com.socialbox.service.MovieService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RequestMapping("/movie")
-@Controller
+@RestController
 public class MovieController {
 
   private final MovieService movieService;
@@ -22,23 +20,28 @@ public class MovieController {
     this.movieService = movieService;
   }
 
-  //@GetMapping("/{id}")
-  //public ResponseEntity<Movie> getMovie(@PathVariable("id") String id) {
-  //
-  //  Movie foundMovie = this.movieService.getMovie(id);
-  //
-  //  if (foundMovie == null) return ResponseEntity.status(401).build();
-  //
-  //  return ResponseEntity.ok(foundMovie);
-  //}
-  //
-  //@PostMapping
-  //public Movie saveMovie(@RequestBody Movie movie) {
-  //  return this.movieService.saveMovie(movie);
-  //}
-
   @GetMapping
-  public List<Movie> getGroups(@RequestParam("ids") String ids) {
-    return this.movieService.searchMovie(ids);
+  public List<MovieDTO> getAllMovies() {
+    return this.movieService.getAllMovies();
+  }
+
+  @GetMapping("/{id}")
+  public ResponseEntity<Movie> getMovie(@PathVariable("id") String id) {
+
+    Movie foundMovie = this.movieService.getMovie(id);
+
+    if (foundMovie == null) return ResponseEntity.status(401).build();
+
+    return ResponseEntity.ok(foundMovie);
+  }
+
+  @PostMapping
+  public Movie saveMovie(@RequestBody Movie movie) {
+    return this.movieService.saveMovie(movie);
+  }
+
+  @GetMapping("/search")
+  public List<Movie> searchMovie(@RequestParam("name") String name) {
+    return this.movieService.searchMovie(name);
   }
 }

@@ -73,6 +73,7 @@ public class MovieServiceImpl implements MovieService {
     String url =
         tmdbConfig.getBaseUrl() + "/search/movie?api_key=" + tmdbConfig.getKey() + "&query=" + name;
     RestTemplate restTemplate = new RestTemplate();
+    log.info("Making request to {}", url);
     ResponseEntity<TmdbDTO> tmdbDTOResponseEntity =
         restTemplate.exchange(url, HttpMethod.GET, new HttpEntity<>(null, null), TmdbDTO.class);
 
