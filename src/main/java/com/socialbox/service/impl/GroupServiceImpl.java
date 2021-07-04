@@ -70,11 +70,8 @@ public class GroupServiceImpl implements GroupService {
     }
 
     currentUser.getGroupsId().add(currentGroup.getId());
-    log.info("Group added!");
+    log.info("Group with id: {} added!", currentGroup.getId());
     this.userService.saveUser(currentUser);
-
-    currentGroup.setMemberCount(1);
-    this.groupRepository.save(currentGroup);
 
     return currentGroup;
   }

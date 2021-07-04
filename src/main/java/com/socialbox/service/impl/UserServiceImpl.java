@@ -44,11 +44,16 @@ public class UserServiceImpl implements UserService {
   }
 
   @Override
-  public User saveUser(User user) {
+  public User loginUser(User user) {
 
     Optional<User> userOptional = this.userRepository.findById(user.getId());
 
     return userOptional.orElseGet(() -> this.userRepository.save(user));
+  }
+
+  @Override
+  public User saveUser(User user) {
+    return this.userRepository.save(user);
   }
 
   @Override
