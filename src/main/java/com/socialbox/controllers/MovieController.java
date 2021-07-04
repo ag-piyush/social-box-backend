@@ -1,5 +1,6 @@
 package com.socialbox.controllers;
 
+import com.socialbox.dto.GroupDTO;
 import com.socialbox.dto.MovieDTO;
 import com.socialbox.model.Movie;
 import com.socialbox.service.MovieService;
@@ -36,7 +37,7 @@ public class MovieController {
   }
 
   @GetMapping
-  public List<Movie> searchMovie(@RequestParam("search") String name) {
-    return this.movieService.searchMovie(name);
+  public List<Movie> getGroups(@RequestParam("ids") String ids) {
+    return this.movieService.searchMovie(ids);
   }
 }
