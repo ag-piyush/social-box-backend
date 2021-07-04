@@ -21,20 +21,20 @@ public class MovieController {
     this.movieService = movieService;
   }
 
-  @GetMapping("/{id}")
-  public ResponseEntity<Movie> getMovie(@PathVariable("id") String id) {
-
-    Movie foundMovie = this.movieService.getMovie(id);
-
-    if (foundMovie == null) return ResponseEntity.status(401).build();
-
-    return ResponseEntity.ok(foundMovie);
-  }
-
-  @PostMapping
-  public Movie saveMovie(@RequestBody Movie movie) {
-    return this.movieService.saveMovie(movie);
-  }
+  //@GetMapping("/{id}")
+  //public ResponseEntity<Movie> getMovie(@PathVariable("id") String id) {
+  //
+  //  Movie foundMovie = this.movieService.getMovie(id);
+  //
+  //  if (foundMovie == null) return ResponseEntity.status(401).build();
+  //
+  //  return ResponseEntity.ok(foundMovie);
+  //}
+  //
+  //@PostMapping
+  //public Movie saveMovie(@RequestBody Movie movie) {
+  //  return this.movieService.saveMovie(movie);
+  //}
 
   @GetMapping
   public List<Movie> getGroups(@RequestParam("ids") String ids) {
