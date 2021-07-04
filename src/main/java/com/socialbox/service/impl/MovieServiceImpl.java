@@ -70,9 +70,11 @@ public class MovieServiceImpl implements MovieService {
 
   @Override
   public List<Movie> searchMovie(String name) {
-    String url = tmdbConfig.getBaseUrl() + "/search/movie?api_key=" + tmdbConfig.getKey() + "&query=" + name;
+    String url =
+        tmdbConfig.getBaseUrl() + "/search/movie?api_key=" + tmdbConfig.getKey() + "&query=" + name;
     RestTemplate restTemplate = new RestTemplate();
-    ResponseEntity<TmdbDTO> tmdbDTOResponseEntity = restTemplate.exchange(url, HttpMethod.GET, new HttpEntity<>(null, null), TmdbDTO.class);
+    ResponseEntity<TmdbDTO> tmdbDTOResponseEntity =
+        restTemplate.exchange(url, HttpMethod.GET, new HttpEntity<>(null, null), TmdbDTO.class);
 
     if (tmdbDTOResponseEntity.getBody() == null) {
       log.debug("No movie found, status: {}", tmdbDTOResponseEntity.getStatusCodeValue());
