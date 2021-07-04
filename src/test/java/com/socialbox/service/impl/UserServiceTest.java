@@ -70,7 +70,7 @@ class UserServiceTest {
 
     Mockito.when(userRepository.save(user)).thenReturn(user);
 
-    User actualUser = userService.saveUser(user);
+    User actualUser = userService.loginUser(user);
     Assertions.assertNotNull(actualUser);
     Assertions.assertEquals(actualUser, user);
   }
@@ -79,7 +79,7 @@ class UserServiceTest {
   void testSaveUser_WhenUserNotFound() {
     User user = getUser();
 
-    User actualUser = userService.saveUser(user);
+    User actualUser = userService.loginUser(user);
     Assertions.assertNull(actualUser);
   }
 
