@@ -20,11 +20,6 @@ public class MovieController {
     this.movieService = movieService;
   }
 
-  @GetMapping
-  public List<MovieDTO> getAllMovies() {
-    return this.movieService.getAllMovies();
-  }
-
   @GetMapping("/{id}")
   public ResponseEntity<Movie> getMovie(@PathVariable("id") String id) {
 
@@ -40,8 +35,8 @@ public class MovieController {
     return this.movieService.saveMovie(movie);
   }
 
-  @GetMapping("/search")
-  public List<Movie> searchMovie(@RequestParam("name") String name) {
+  @GetMapping
+  public List<Movie> searchMovie(@RequestParam("search") String name) {
     return this.movieService.searchMovie(name);
   }
 }
