@@ -2,6 +2,7 @@ package com.socialbox.service.impl;
 
 import com.google.common.collect.Lists;
 import com.socialbox.dto.GroupDTO;
+import com.socialbox.dto.InviteDTO;
 import com.socialbox.model.Group;
 import com.socialbox.model.GroupMovie;
 import com.socialbox.model.User;
@@ -99,5 +100,24 @@ public class GroupServiceImpl implements GroupService {
     }
 
     return groupMovies;
+  }
+
+  @Override
+  public InviteDTO sendInvite(String groupId, String userId) {
+    Group currGroup = this.groupRepository.findById(groupId).orElse(null);
+
+    if (currGroup == null) {
+      log.error("No group found.");
+    } else if (!currGroup.getAdminId().equals(userId)) {
+      log.error("Given user is not an admin for the group.");
+    }
+
+    InviteDTO invite =
+        InviteDTO.builder()
+            .content("Join my group with the following link")
+            .link("<insert link!>")
+            .build();
+
+    return invite;
   }
 }
