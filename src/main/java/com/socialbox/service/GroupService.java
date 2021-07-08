@@ -1,6 +1,7 @@
 package com.socialbox.service;
 
 import com.socialbox.dto.GroupDTO;
+import com.socialbox.dto.InviteDTO;
 import com.socialbox.model.Group;
 import com.socialbox.model.GroupMovie;
 
@@ -16,4 +17,6 @@ public interface GroupService {
   Group createGroup(Group group);
 
   List<GroupMovie> saveMovie(List<GroupMovie> groupMovies);
+
+  InviteDTO sendInvite(String groupId, String userId);
 }
