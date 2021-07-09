@@ -1,5 +1,6 @@
 package com.socialbox.model;
 
+import com.socialbox.enums.Genre;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -20,4 +21,5 @@ public class Movie {
   private String photoURL;
   private int votes;
   private String tmdbId;
+  private Genre genre;
 }
