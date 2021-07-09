@@ -29,7 +29,8 @@ public class GroupServiceImpl implements GroupService {
   private final InviteLinkService inviteLinkService;
 
   @Autowired
-  public GroupServiceImpl(GroupRepository groupRepository, UserService userService, InviteLinkService inviteLinkService) {
+  public GroupServiceImpl(GroupRepository groupRepository, UserService userService,
+      InviteLinkService inviteLinkService) {
     this.groupRepository = groupRepository;
     this.userService = userService;
     this.inviteLinkService = inviteLinkService;
@@ -83,25 +84,27 @@ public class GroupServiceImpl implements GroupService {
 
   @Override
   public List<GroupMovie> saveMovie(List<GroupMovie> groupMovies) {
-
-    for (GroupMovie movie : groupMovies) {
-      String groupId = movie.getGroupId();
-      Optional<Group> groupOptional = this.groupRepository.findById(groupId);
-      Group currentGroup = groupOptional.orElse(null);
-
-      if (currentGroup == null) {
-        log.info("Group not found");
-        continue;
-      }
-
-      if (currentGroup.getMovieList() == null) {
-        log.info("Empty movie list in group!");
-        currentGroup.setMovieList(new ArrayList<>());
-      }
-      currentGroup.getMovieList().add(movie);
-      log.info("Movie added to group: {}", movie);
-      saveGroup(currentGroup);
+    if (groupMovies.isEmpty()) {
+      log.error("Empty list to be saved");
+      return new ArrayList<>();
     }
+
+    Optional<Group> groupOptional = this.groupRepository.findById(groupMovies.get(0).getGroupId());
+    Group currentGroup = groupOptional.orElse(null);
+
+    if (currentGroup == null) {
+      log.error("Group not found");
+      return new ArrayList<>();
+    }
+
+    if (currentGroup.getMovieList() == null) {
+      log.info("Empty movie list in group!");
+      currentGroup.setMovieList(new ArrayList<>());
+    }
+
+    currentGroup.getMovieList().addAll(groupMovies);
+    log.info("Movie added to group: {}", groupMovies);
+    saveGroup(currentGroup);
 
     return groupMovies;
   }
@@ -112,16 +115,18 @@ public class GroupServiceImpl implements GroupService {
 
     if (currGroup == null) {
       log.error("No group found.");
+      return null;
     } else if (!currGroup.getAdminId().equals(userId)) {
       log.error("Given user is not an admin for the group.");
+      return null;
     }
 
     InviteLink inviteLink = new InviteLink();
     inviteLink.setURL(this.inviteLinkService.createLink(10));
 
     return InviteDTO.builder()
-            .content("Join my group with the following link:")
-            .link(inviteLink)
-            .build();
+        .content("Join my group with the following link:")
+        .link(inviteLink)
+        .build();
   }
 }

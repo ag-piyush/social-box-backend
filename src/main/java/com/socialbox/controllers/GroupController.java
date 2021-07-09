@@ -48,7 +48,13 @@ public class GroupController {
   }
 
   @GetMapping("/invite")
-  public InviteDTO sendInvite(@RequestParam String groupId,@RequestParam String userId){
-    return this.groupService.sendInvite(groupId, userId);
+  public ResponseEntity<InviteDTO> sendInvite(@RequestParam String groupId, @RequestParam String userId) {
+    InviteDTO inviteDTO = this.groupService.sendInvite(groupId, userId);
+
+    if (inviteDTO == null) {
+      return ResponseEntity.badRequest().build();
+    }
+
+    return ResponseEntity.ok(inviteDTO);
   }
 }
