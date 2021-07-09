@@ -1,6 +1,7 @@
 package com.socialbox.controllers;
 
 import com.socialbox.dto.GroupDTO;
+import com.socialbox.dto.InviteDTO;
 import com.socialbox.model.Group;
 import com.socialbox.model.GroupMovie;
 import com.socialbox.service.GroupService;
@@ -44,5 +45,10 @@ public class GroupController {
   @PostMapping("/movie")
   public List<GroupMovie> addGroupMovie(@RequestBody List<GroupMovie> groupMovies) {
     return this.groupService.saveMovie(groupMovies);
+  }
+
+  @GetMapping("/invite")
+  public InviteDTO sendInvite(@RequestParam String groupId,@RequestParam String userId){
+    return this.groupService.sendInvite(groupId, userId);
   }
 }

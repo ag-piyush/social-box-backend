@@ -5,9 +5,11 @@ import com.socialbox.dto.GroupDTO;
 import com.socialbox.dto.InviteDTO;
 import com.socialbox.model.Group;
 import com.socialbox.model.GroupMovie;
+import com.socialbox.model.InviteLink;
 import com.socialbox.model.User;
 import com.socialbox.repository.GroupRepository;
 import com.socialbox.service.GroupService;
+import com.socialbox.service.InviteLinkService;
 import com.socialbox.service.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,11 +26,13 @@ public class GroupServiceImpl implements GroupService {
 
   private final GroupRepository groupRepository;
   private final UserService userService;
+  private final InviteLinkService inviteLinkService;
 
   @Autowired
-  public GroupServiceImpl(GroupRepository groupRepository, UserService userService) {
+  public GroupServiceImpl(GroupRepository groupRepository, UserService userService, InviteLinkService inviteLinkService) {
     this.groupRepository = groupRepository;
     this.userService = userService;
+    this.inviteLinkService = inviteLinkService;
   }
 
   @Override
@@ -112,12 +116,12 @@ public class GroupServiceImpl implements GroupService {
       log.error("Given user is not an admin for the group.");
     }
 
-    InviteDTO invite =
-        InviteDTO.builder()
-            .content("Join my group with the following link")
-            .link("<insert link!>")
-            .build();
+    InviteLink inviteLink = new InviteLink();
+    inviteLink.setURL(this.inviteLinkService.createLink(10));
 
-    return invite;
+    return InviteDTO.builder()
+            .content("Join my group with the following link:")
+            .link(inviteLink)
+            .build();
   }
 }
