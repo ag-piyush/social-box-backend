@@ -1,11 +1,11 @@
 package com.socialbox.service.impl;
 
-import com.google.common.collect.Lists;
+import com.socialbox.dto.UserDTO;
 import com.socialbox.model.User;
 import com.socialbox.repository.UserRepository;
-import com.socialbox.service.GroupService;
 import com.socialbox.service.MovieService;
 import com.socialbox.service.UserService;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import org.junit.jupiter.api.Assertions;
@@ -21,17 +21,17 @@ class UserServiceTest {
 
   @Mock UserRepository userRepository;
   MovieService movieService;
-  GroupService groupService;
   UserService userService;
 
   @BeforeEach
   void setUp() {
-    userService = new UserServiceImpl(userRepository, movieService, groupService);
+    userService = new UserServiceImpl(userRepository, movieService);
   }
 
   @Test
   void testGetAllUsers() {
-    List<User> users = Lists.newArrayList(getUser());
+    List<User> users = new ArrayList<>();
+    users.add(getUser());
 
     Mockito.when(userRepository.findAll()).thenReturn(users);
 
@@ -68,24 +68,27 @@ class UserServiceTest {
 
   @Test
   void testSaveUser_WhenUserFound() {
-    User user = getUser();
+    UserDTO user = getUserDTO();
 
-    Mockito.when(userRepository.save(user)).thenReturn(user);
+    Mockito.when(userRepository.save(Mockito.any())).thenReturn(user);
 
     User actualUser = userService.loginUser(user);
     Assertions.assertNotNull(actualUser);
-    Assertions.assertEquals(actualUser, user);
   }
 
   @Test
   void testSaveUser_WhenUserNotFound() {
-    User user = getUser();
+    UserDTO user = getUserDTO();
 
     User actualUser = userService.loginUser(user);
     Assertions.assertNull(actualUser);
   }
 
   private User getUser() {
-    return User.builder().id("userId").email("userMail").password("passWord").build();
+    return User.builder().userId("userId").email("userMail").build();
+  }
+
+  private UserDTO getUserDTO() {
+    return UserDTO.builder().id("userId").email("userMail").build();
   }
 }

@@ -1,14 +1,13 @@
 package com.socialbox.service.impl;
 
+import com.socialbox.dto.UserDTO;
 import com.socialbox.dto.UserMovieDTO;
-import com.socialbox.model.Group;
 import com.socialbox.model.Movie;
 import com.socialbox.model.User;
 import com.socialbox.repository.UserRepository;
-import com.socialbox.service.GroupService;
 import com.socialbox.service.MovieService;
 import com.socialbox.service.UserService;
-import java.util.HashSet;
+import java.util.stream.Collectors;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -23,14 +22,11 @@ public class UserServiceImpl implements UserService {
 
   private final UserRepository userRepository;
   private final MovieService movieService;
-  private final GroupService groupService;
 
   @Autowired
-  public UserServiceImpl(UserRepository userRepository, MovieService movieService,
-      GroupService groupService) {
+  public UserServiceImpl(UserRepository userRepository, MovieService movieService) {
     this.userRepository = userRepository;
     this.movieService = movieService;
-    this.groupService = groupService;
   }
 
   @Override
@@ -50,11 +46,21 @@ public class UserServiceImpl implements UserService {
   }
 
   @Override
-  public User loginUser(User user) {
+  public User loginUser(UserDTO user) {
 
     Optional<User> userOptional = this.userRepository.findById(user.getId());
 
-    return userOptional.orElseGet(() -> this.userRepository.save(user));
+    return userOptional.orElseGet(
+        () -> this.userRepository.save(
+            User.builder()
+                .userId(user.getId())
+                .email(user.getEmail())
+                .groups(new ArrayList<>())
+                .owningGroup(new ArrayList<>())
+                .photoURL(user.getPhotoURL())
+                .personalMovieList(new ArrayList<>())
+                .sharedMovieList(new ArrayList<>())
+                .build()));
   }
 
   @Override
@@ -72,7 +78,11 @@ public class UserServiceImpl implements UserService {
       return null;
     }
 
-    List<Movie> movieList = this.movieService.getMoviesByIds(currentUser.getPersonalMovieList());
+    List<Movie> movieList =
+        this.movieService.getMoviesByIds(currentUser.getPersonalMovieList()
+            .stream()
+            .map(userRatings -> userRatings.getMovie().getId())
+            .collect(Collectors.toList()));
     List<UserMovieDTO> movieDTOS = new ArrayList<>();
 
     for (Movie movie : movieList) {
@@ -91,65 +101,5 @@ public class UserServiceImpl implements UserService {
     }
 
     return movieDTOS;
-  }
-
-  @Override public Group addUserToGroup(String groupId, String userId) {
-    Optional<User> userOptional = this.userRepository.findById(userId);
-    Group group = this.groupService.getGroup(groupId);
-
-    if (!userOptional.isPresent()) {
-      log.error("Invalid userId: {}", userId);
-      return null;
-    }
-    if (group == null) {
-      log.error("Invalid groupId: {}", groupId);
-      return null;
-    }
-
-    User user = userOptional.get();
-
-    if (user.getGroupsId() == null) {
-      log.info("Creating a new groupList for user: {}", userId);
-      user.setGroupsId(new HashSet<>());
-    }
-    user.getGroupsId().add(groupId);
-    this.userRepository.save(user);
-
-    if (group.getUsersId() == null) {
-      log.info("Creating a new userList for group: {}", groupId);
-      group.setUsersId(new HashSet<>());
-    }
-    group.getUsersId().add(userId);
-    return this.groupService.saveGroup(group);
-  }
-
-  @Override public Group removeUserFromGroup(String groupId, String userId) {
-    Optional<User> userOptional = this.userRepository.findById(userId);
-    Group group = this.groupService.getGroup(groupId);
-
-    if (!userOptional.isPresent()) {
-      log.error("Invalid userId: {}", userId);
-      return null;
-    }
-    if (group == null) {
-      log.error("Invalid groupId: {}", groupId);
-      return null;
-    }
-
-    User user = userOptional.get();
-
-    if (user.getGroupsId() == null
-        || !user.getGroupsId().contains(groupId)
-        || group.getUsersId() == null
-        || !group.getUsersId().contains(userId)) {
-      log.error("Invalid userId or groupId");
-      return null;
-    }
-
-    user.getGroupsId().remove(groupId);
-    this.userRepository.save(user);
-
-    group.getUsersId().remove(userId);
-    return this.groupService.saveGroup(group);
   }
 }
