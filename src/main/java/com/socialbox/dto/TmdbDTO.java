@@ -1,6 +1,5 @@
 package com.socialbox.dto;
 
-import com.socialbox.model.Tmdb;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

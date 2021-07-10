@@ -1,4 +1,4 @@
-package com.socialbox.model;
+package com.socialbox.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
