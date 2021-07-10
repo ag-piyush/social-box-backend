@@ -1,6 +1,5 @@
 package com.socialbox.service.impl;
 
-import com.google.common.collect.Lists;
 import com.socialbox.dto.GroupDTO;
 import com.socialbox.dto.InviteDTO;
 import com.socialbox.model.Group;
@@ -16,7 +15,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 
@@ -29,8 +27,8 @@ public class GroupServiceImpl implements GroupService {
   private final InviteLinkService inviteLinkService;
 
   @Autowired
-  public GroupServiceImpl(GroupRepository groupRepository, UserService userService,
-      InviteLinkService inviteLinkService) {
+  public GroupServiceImpl(GroupRepository groupRepository,
+      UserService userService, InviteLinkService inviteLinkService) {
     this.groupRepository = groupRepository;
     this.userService = userService;
     this.inviteLinkService = inviteLinkService;
@@ -38,7 +36,7 @@ public class GroupServiceImpl implements GroupService {
 
   @Override
   public List<GroupDTO> getAllGroups(List<String> groupIds) {
-    List<Group> groupList = Lists.newArrayList(this.groupRepository.findAllById(groupIds));
+    List<Group> groupList = new ArrayList<>(this.groupRepository.findAllById(groupIds));
     List<GroupDTO> groupDTOList = new ArrayList<>();
 
     for (Group group : groupList) {
@@ -66,20 +64,17 @@ public class GroupServiceImpl implements GroupService {
   }
 
   @Override
-  public Group createGroup(Group group) {
-    Group currentGroup = this.groupRepository.save(group);
-
-    User currentUser = this.userService.getUserById(currentGroup.getAdminId());
-    if (currentUser.getGroupsId() == null) {
-      log.info("No previous groups!");
-      currentUser.setGroupsId(new HashSet<>());
-    }
-
-    currentUser.getGroupsId().add(currentGroup.getId());
-    log.info("Group with id: {} added!", currentGroup.getId());
-    this.userService.saveUser(currentUser);
-
-    return currentGroup;
+  public Group createGroup(GroupDTO group) {
+    return this.groupRepository.save(
+        Group.builder()
+            .id(group.getId())
+            .name(group.getName())
+            .photoURL(group.getPhotoURL())
+            .memberCount(1)
+            .movieList(new ArrayList<>())
+            .users(new ArrayList<>())
+            .admin(group.getAdmin())
+            .build());
   }
 
   @Override
@@ -89,7 +84,8 @@ public class GroupServiceImpl implements GroupService {
       return new ArrayList<>();
     }
 
-    Optional<Group> groupOptional = this.groupRepository.findById(groupMovies.get(0).getGroupId());
+    Optional<Group> groupOptional =
+        this.groupRepository.findById(groupMovies.get(0).getGroup().getId());
     Group currentGroup = groupOptional.orElse(null);
 
     if (currentGroup == null) {
@@ -116,17 +112,75 @@ public class GroupServiceImpl implements GroupService {
     if (currGroup == null) {
       log.error("No group found.");
       return null;
-    } else if (!currGroup.getAdminId().equals(userId)) {
+    } else if (!currGroup.getAdmin().getUserId().equals(userId)) {
       log.error("Given user is not an admin for the group.");
       return null;
     }
 
     InviteLink inviteLink = new InviteLink();
-    inviteLink.setURL(this.inviteLinkService.createLink(10));
+    inviteLink.setUrl(this.inviteLinkService.createLink(10));
 
     return InviteDTO.builder()
         .content("Join my group with the following link:")
         .link(inviteLink)
         .build();
+  }
+
+  @Override
+  public Group addUserToGroup(String groupId, String userId) {
+    User user = this.userService.getUserById(userId);
+    Group group = this.getGroup(groupId);
+
+    if (user == null) {
+      log.error("Invalid userId: {}", userId);
+      return null;
+    }
+    if (group == null) {
+      log.error("Invalid groupId: {}", groupId);
+      return null;
+    }
+
+    if (user.getGroups() == null) {
+      log.info("Creating a new groupList for user: {}", userId);
+      user.setGroups(new ArrayList<>());
+    }
+    user.getGroups().add(group);
+    this.userService.saveUser(user);
+
+    if (group.getUsers() == null) {
+      log.info("Creating a new userList for group: {}", groupId);
+      group.setUsers(new ArrayList<>());
+    }
+    group.getUsers().add(user);
+    return this.saveGroup(group);
+  }
+
+  @Override
+  public Group removeUserFromGroup(String groupId, String userId) {
+    User user = this.userService.getUserById(userId);
+    Group group = this.getGroup(groupId);
+
+    if (user == null) {
+      log.error("Invalid userId: {}", userId);
+      return null;
+    }
+    if (group == null) {
+      log.error("Invalid groupId: {}", groupId);
+      return null;
+    }
+
+    if (user.getGroups() == null
+        || !user.getGroups().contains(group)
+        || group.getUsers() == null
+        || !group.getUsers().contains(user)) {
+      log.error("Invalid userId or groupId");
+      return null;
+    }
+
+    user.getGroups().remove(group);
+    this.userService.saveUser(user);
+
+    group.getUsers().remove(user);
+    return this.saveGroup(group);
   }
 }

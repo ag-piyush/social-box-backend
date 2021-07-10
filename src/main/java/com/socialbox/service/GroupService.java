@@ -14,9 +14,13 @@ public interface GroupService {
 
   Group saveGroup(Group group);
 
-  Group createGroup(Group group);
+  Group createGroup(GroupDTO group);
 
   List<GroupMovie> saveMovie(List<GroupMovie> groupMovies);
 
   InviteDTO sendInvite(String groupId, String userId);
+
+  Group addUserToGroup(String groupId, String userId);
+
+  Group removeUserFromGroup(String groupId, String userId);
 }

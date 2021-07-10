@@ -38,7 +38,7 @@ public class GroupController {
   }
 
   @PostMapping
-  public Group saveGroup(@RequestBody Group group) {
+  public Group saveGroup(@RequestBody GroupDTO group) {
     return this.groupService.createGroup(group);
   }
 
@@ -56,5 +56,25 @@ public class GroupController {
     }
 
     return ResponseEntity.ok(inviteDTO);
+  }
+
+  @PostMapping("/{id}/group")
+  public ResponseEntity<Group> addUserToGroup(@RequestParam("qroupId") String groupId,
+      @PathVariable("id") String userId) {
+    Group group = this.groupService.addUserToGroup(groupId, userId);
+
+    if (group == null) return ResponseEntity.notFound().build();
+
+    return ResponseEntity.ok(group);
+  }
+
+  @DeleteMapping("/{id}/group")
+  public ResponseEntity<Group> removeUserToGroup(@RequestParam("qroupId") String groupId,
+      @PathVariable("id") String userId) {
+    Group group = this.groupService.removeUserFromGroup(groupId, userId);
+
+    if (group == null) return ResponseEntity.notFound().build();
+
+    return ResponseEntity.ok(group);
   }
 }
