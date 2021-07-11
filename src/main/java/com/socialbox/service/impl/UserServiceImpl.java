@@ -1,11 +1,13 @@
 package com.socialbox.service.impl;
 
+import com.socialbox.dto.UserDTO;
 import com.socialbox.dto.UserMovieDTO;
 import com.socialbox.model.Movie;
 import com.socialbox.model.User;
 import com.socialbox.repository.UserRepository;
 import com.socialbox.service.MovieService;
 import com.socialbox.service.UserService;
+import java.util.stream.Collectors;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -44,11 +46,21 @@ public class UserServiceImpl implements UserService {
   }
 
   @Override
-  public User loginUser(User user) {
+  public User loginUser(UserDTO user) {
 
     Optional<User> userOptional = this.userRepository.findById(user.getId());
 
-    return userOptional.orElseGet(() -> this.userRepository.save(user));
+    return userOptional.orElseGet(
+        () -> this.userRepository.save(
+            User.builder()
+                .userId(user.getId())
+                .email(user.getEmail())
+                .groups(new ArrayList<>())
+                .owningGroup(new ArrayList<>())
+                .photoURL(user.getPhotoURL())
+                .personalMovieList(new ArrayList<>())
+                .sharedMovieList(new ArrayList<>())
+                .build()));
   }
 
   @Override
@@ -66,7 +78,11 @@ public class UserServiceImpl implements UserService {
       return null;
     }
 
-    List<Movie> movieList = this.movieService.getMoviesByIds(currentUser.getPersonalMovieList());
+    List<Movie> movieList =
+        this.movieService.getMoviesByIds(currentUser.getPersonalMovieList()
+            .stream()
+            .map(userRatings -> userRatings.getMovie().getId())
+            .collect(Collectors.toList()));
     List<UserMovieDTO> movieDTOS = new ArrayList<>();
 
     for (Movie movie : movieList) {

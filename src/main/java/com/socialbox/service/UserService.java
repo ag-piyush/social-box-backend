@@ -1,5 +1,6 @@
 package com.socialbox.service;
 
+import com.socialbox.dto.UserDTO;
 import com.socialbox.dto.UserMovieDTO;
 import com.socialbox.model.User;
 
@@ -11,7 +12,7 @@ public interface UserService {
 
   User getUserById(String id);
 
-  User loginUser(User user);
+  User loginUser(UserDTO user);
 
   User saveUser(User user);
 

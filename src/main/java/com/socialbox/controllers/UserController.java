@@ -1,5 +1,6 @@
 package com.socialbox.controllers;
 
+import com.socialbox.dto.UserDTO;
 import com.socialbox.dto.UserMovieDTO;
 import com.socialbox.model.User;
 import com.socialbox.service.UserService;
@@ -40,7 +41,7 @@ public class UserController {
   }
 
   @PostMapping
-  public ResponseEntity<User> saveUser(@RequestBody User user) {
+  public ResponseEntity<User> saveUser(@RequestBody UserDTO user) {
 
     User createdUser = this.userService.loginUser(user);
 
