@@ -29,8 +29,8 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-websocket'
     annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
 
-    // MySQL
-    runtimeOnly 'mysql:mysql-connector-java'
+    // Postgres
+    implementation 'org.postgresql:postgresql'
 
     // Lombok
     compileOnly 'org.projectlombok:lombok'
