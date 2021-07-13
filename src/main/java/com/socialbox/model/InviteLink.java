@@ -18,14 +18,15 @@ import lombok.NoArgsConstructor;
 @Entity
 @Table(name = "invite_link")
 public class InviteLink {
-    @Id
-    @Column(name = "id")
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private String id;
 
-    @Column(name = "url")
-    private String url;
+  @Id
+  @Column(name = "id", nullable = false)
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  private Integer id;
 
-    @Column(name = "expired")
-    private Boolean expired;
+  @Column(name = "url", nullable = false)
+  private String url;
+
+  @Column(name = "expired", nullable = false)
+  private Boolean expired;
 }

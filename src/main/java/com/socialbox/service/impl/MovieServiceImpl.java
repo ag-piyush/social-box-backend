@@ -50,12 +50,12 @@ public class MovieServiceImpl implements MovieService {
   }
 
   @Override
-  public List<Movie> getMoviesByIds(List<String> movieIds) {
+  public List<Movie> getMoviesByIds(List<Integer> movieIds) {
     return new ArrayList<>(this.movieRepository.findAllById(movieIds));
   }
 
   @Override
-  public Movie getMovie(String id) {
+  public Movie getMovie(Integer id) {
     Optional<Movie> movieOptional = this.movieRepository.findById(id);
     return movieOptional.orElse(null);
   }

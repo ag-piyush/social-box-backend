@@ -23,12 +23,12 @@ public class GroupController {
   }
 
   @GetMapping
-  public List<GroupDTO> getGroups(@RequestParam("ids") List<String> ids) {
+  public List<GroupDTO> getGroups(@RequestParam("ids") List<Integer> ids) {
     return this.groupService.getAllGroups(ids);
   }
 
   @GetMapping("/{id}")
-  public ResponseEntity<Group> getGroup(@PathVariable("id") String id) {
+  public ResponseEntity<Group> getGroup(@PathVariable("id") Integer id) {
 
     Group foundGroup = this.groupService.getGroup(id);
 
@@ -38,7 +38,7 @@ public class GroupController {
   }
 
   @PostMapping
-  public Group saveGroup(@RequestBody GroupDTO group) {
+  public Group saveGroup(@RequestBody Group group) {
     return this.groupService.createGroup(group);
   }
 
@@ -48,7 +48,8 @@ public class GroupController {
   }
 
   @GetMapping("/invite")
-  public ResponseEntity<InviteDTO> sendInvite(@RequestParam String groupId, @RequestParam String userId) {
+  public ResponseEntity<InviteDTO> sendInvite(@RequestParam Integer groupId,
+      @RequestParam Integer userId) {
     InviteDTO inviteDTO = this.groupService.sendInvite(groupId, userId);
 
     if (inviteDTO == null) {
@@ -58,9 +59,9 @@ public class GroupController {
     return ResponseEntity.ok(inviteDTO);
   }
 
-  @PostMapping("/{id}/group")
-  public ResponseEntity<Group> addUserToGroup(@RequestParam("qroupId") String groupId,
-      @PathVariable("id") String userId) {
+  @PostMapping("/{id}/user")
+  public ResponseEntity<Group> addUserToGroup(@PathVariable("id") Integer groupId,
+      @RequestParam("userId") Integer userId) {
     Group group = this.groupService.addUserToGroup(groupId, userId);
 
     if (group == null) return ResponseEntity.notFound().build();
@@ -68,9 +69,9 @@ public class GroupController {
     return ResponseEntity.ok(group);
   }
 
-  @DeleteMapping("/{id}/group")
-  public ResponseEntity<Group> removeUserToGroup(@RequestParam("qroupId") String groupId,
-      @PathVariable("id") String userId) {
+  @DeleteMapping("/{id}/user")
+  public ResponseEntity<Group> removeUserFromGroup(@PathVariable("id") Integer groupId,
+      @RequestParam("userId") Integer userId) {
     Group group = this.groupService.removeUserFromGroup(groupId, userId);
 
     if (group == null) return ResponseEntity.notFound().build();
