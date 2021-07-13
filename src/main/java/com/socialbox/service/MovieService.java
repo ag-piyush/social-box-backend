@@ -9,9 +9,9 @@ public interface MovieService {
 
   List<MovieDTO> getAllMovies();
 
-  List<Movie> getMoviesByIds(List<String> movieIds);
+  List<Movie> getMoviesByIds(List<Integer> movieIds);
 
-  Movie getMovie(String id);
+  Movie getMovie(Integer id);
 
   Movie saveMovie(Movie movie);
 

@@ -35,7 +35,7 @@ public class GroupServiceImpl implements GroupService {
   }
 
   @Override
-  public List<GroupDTO> getAllGroups(List<String> groupIds) {
+  public List<GroupDTO> getAllGroups(List<Integer> groupIds) {
     List<Group> groupList = new ArrayList<>(this.groupRepository.findAllById(groupIds));
     List<GroupDTO> groupDTOList = new ArrayList<>();
 
@@ -53,7 +53,7 @@ public class GroupServiceImpl implements GroupService {
   }
 
   @Override
-  public Group getGroup(String id) {
+  public Group getGroup(Integer id) {
     Optional<Group> groupOptional = this.groupRepository.findById(id);
     return groupOptional.orElse(null);
   }
@@ -64,17 +64,8 @@ public class GroupServiceImpl implements GroupService {
   }
 
   @Override
-  public Group createGroup(GroupDTO group) {
-    return this.groupRepository.save(
-        Group.builder()
-            .id(group.getId())
-            .name(group.getName())
-            .photoURL(group.getPhotoURL())
-            .memberCount(1)
-            .movieList(new ArrayList<>())
-            .users(new ArrayList<>())
-            .admin(group.getAdmin())
-            .build());
+  public Group createGroup(Group group) {
+    return this.groupRepository.save(group);
   }
 
   @Override
@@ -102,11 +93,11 @@ public class GroupServiceImpl implements GroupService {
     log.info("Movie added to group: {}", groupMovies);
     saveGroup(currentGroup);
 
-    return groupMovies;
+    return currentGroup.getMovieList();
   }
 
   @Override
-  public InviteDTO sendInvite(String groupId, String userId) {
+  public InviteDTO sendInvite(Integer groupId, Integer userId) {
     Group currGroup = this.groupRepository.findById(groupId).orElse(null);
 
     if (currGroup == null) {
@@ -127,7 +118,7 @@ public class GroupServiceImpl implements GroupService {
   }
 
   @Override
-  public Group addUserToGroup(String groupId, String userId) {
+  public Group addUserToGroup(Integer groupId, Integer userId) {
     User user = this.userService.getUserById(userId);
     Group group = this.getGroup(groupId);
 
@@ -156,7 +147,7 @@ public class GroupServiceImpl implements GroupService {
   }
 
   @Override
-  public Group removeUserFromGroup(String groupId, String userId) {
+  public Group removeUserFromGroup(Integer groupId, Integer userId) {
     User user = this.userService.getUserById(userId);
     Group group = this.getGroup(groupId);
 

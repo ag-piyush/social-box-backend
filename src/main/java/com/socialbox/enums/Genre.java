@@ -6,5 +6,6 @@ public enum Genre {
   SCI_FI,
   ACTION,
   ROM_COM,
-  COMEDY
+  COMEDY,
+  UNKNOWN
 }

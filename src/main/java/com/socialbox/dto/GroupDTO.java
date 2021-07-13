@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Builder
 public class GroupDTO {
-  private String id;
+  private Integer id;
   private String name;
   private String photoURL;
   private int memberCount;

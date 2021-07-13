@@ -1,8 +1,10 @@
 package com.socialbox.model;
 
 import java.util.List;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -21,28 +23,30 @@ import lombok.NoArgsConstructor;
 @Builder
 @Entity
 @Table(name = "group_movie")
+// Todo: This entity is not being stored separately
 public class GroupMovie {
-  @Id
-  @Column(name = "id")
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
-  private String id;
 
-  @OneToMany
+  @Id
+  @Column(name = "id", nullable = false)
+  @GeneratedValue(strategy = GenerationType.AUTO)
+  private Integer id;
+
+  @OneToMany(targetEntity = Review.class, mappedBy = "groupMovie", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
   private List<Review> reviews;
 
-  @Column(name = "name")
+  @Column(name = "name", nullable = false)
   private String name;
 
-  @Column(name = "photoUrl")
+  @Column(name = "photo_url")
   private String photoURL;
 
-  @Column(name = "rating")
+  @Column(name = "rating", nullable = false)
   private double rating;
 
-  @Column(name = "votes")
+  @Column(name = "votes", nullable = false)
   private int votes;
 
   @ManyToOne
-  @JoinColumn(name = "group_id")
+  @JoinColumn(name = "groups_id", nullable = false)
   private Group group;
 }

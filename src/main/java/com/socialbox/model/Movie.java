@@ -1,11 +1,13 @@
 package com.socialbox.model;
 
 import com.socialbox.enums.Genre;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -27,31 +29,32 @@ import java.util.List;
 @Entity
 @Table(name = "movie")
 public class Movie {
+
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
-  @Column(name = "id")
-  private String id;
+  @Column(name = "id", nullable = false)
+  private Integer id;
 
-  @Column(name = "name")
+  @Column(name = "name", nullable = false)
   private String name;
 
-  @Column(name = "rating")
+  @Column(name = "rating", nullable = false)
   private double rating;
 
   @Column(name = "photo_url")
   private String photoURL;
 
-  @Column(name = "votes")
+  @Column(name = "votes", nullable = false)
   private int votes;
-
-  @Column(name = "tmdbId")
-  private String tmdbId;
 
   @Enumerated(EnumType.STRING)
   @ElementCollection(targetClass = Genre.class)
   private List<Genre> genre;
 
-  @OneToMany
+  @Column(name = "tmdb_id", nullable = false)
+  private String tmdbId;
+
+  @OneToMany(targetEntity = Review.class, mappedBy = "movie", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
   private List<Review> reviews;
 
   @ManyToOne
@@ -59,5 +62,6 @@ public class Movie {
   private User user;
 
   @ManyToOne
+  @JoinColumn(name = "user_ratings_id")
   private UserRatings userRatings;
 }

@@ -1,6 +1,5 @@
 package com.socialbox.controllers;
 
-import com.socialbox.dto.UserDTO;
 import com.socialbox.dto.UserMovieDTO;
 import com.socialbox.model.User;
 import com.socialbox.service.UserService;
@@ -31,7 +30,7 @@ public class UserController {
   }
 
   @GetMapping("/{id}")
-  public ResponseEntity<User> getUserById(@PathVariable("id") String id) {
+  public ResponseEntity<User> getUserById(@PathVariable("id") Integer id) {
 
     User foundUser = this.userService.getUserById(id);
 
@@ -41,7 +40,7 @@ public class UserController {
   }
 
   @PostMapping
-  public ResponseEntity<User> saveUser(@RequestBody UserDTO user) {
+  public ResponseEntity<User> saveUser(@RequestBody User user) {
 
     User createdUser = this.userService.loginUser(user);
 
@@ -49,7 +48,7 @@ public class UserController {
   }
 
   @GetMapping("/{id}/movies")
-  public ResponseEntity<List<UserMovieDTO>> getMovies(@PathVariable("id") String id) {
+  public ResponseEntity<List<UserMovieDTO>> getMovies(@PathVariable("id") Integer id) {
 
     List<UserMovieDTO> movieDTOS = this.userService.getMovies(id);
 

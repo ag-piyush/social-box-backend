@@ -22,17 +22,17 @@ import lombok.NoArgsConstructor;
 public class UserRatings {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
-  @Column(name = "id")
-  private String id;
+  @Column(name = "id", nullable = false)
+  private Integer id;
 
-  @Column(name = "ratings")
+  @Column(name = "ratings", nullable = false)
   private double ratings;
 
   @ManyToOne
-  @JoinColumn(name = "user_id")
+  @JoinColumn(name = "user_id", nullable = false)
   private User user;
 
   @ManyToOne
-  @JoinColumn(name = "movie_id")
+  @JoinColumn(name = "movie_id", nullable = false)
   private Movie movie;
 }
