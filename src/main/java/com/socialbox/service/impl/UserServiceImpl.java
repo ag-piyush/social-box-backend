@@ -48,9 +48,7 @@ public class UserServiceImpl implements UserService {
   public User loginUser(User user) {
     Optional<User> userOptional;
 
-    if (user.getUserId() != null)
-      userOptional = this.userRepository.findById(user.getUserId());
-    else userOptional = Optional.empty();
+    userOptional = this.userRepository.findByName(user.getName());
 
     return userOptional.orElseGet(() -> this.userRepository.save(user));
   }
