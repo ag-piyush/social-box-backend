@@ -1,11 +1,11 @@
 package com.socialbox.service.impl;
 
-import com.socialbox.dto.UserDTO;
 import com.socialbox.model.User;
 import com.socialbox.repository.UserRepository;
 import com.socialbox.service.MovieService;
 import com.socialbox.service.UserService;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import org.junit.jupiter.api.Assertions;
@@ -30,8 +30,7 @@ class UserServiceTest {
 
   @Test
   void testGetAllUsers() {
-    List<User> users = new ArrayList<>();
-    users.add(getUser());
+    List<User> users = Collections.singletonList(getUser());
 
     Mockito.when(userRepository.findAll()).thenReturn(users);
 
@@ -44,7 +43,7 @@ class UserServiceTest {
 
   @Test
   void testGetUserById_WhenUserPresent() {
-    String id = "id";
+    Integer id = 123;
     User expectedUser = getUser();
 
     Mockito.when(userRepository.findById(id)).thenReturn(Optional.of(expectedUser));
@@ -57,7 +56,7 @@ class UserServiceTest {
 
   @Test
   void testGetUserById_WhenUserNotPresent() {
-    String id = "id";
+    Integer id = 123;
 
     Mockito.when(userRepository.findById(id)).thenReturn(Optional.empty());
 
@@ -68,7 +67,7 @@ class UserServiceTest {
 
   @Test
   void testSaveUser_WhenUserFound() {
-    UserDTO user = getUserDTO();
+    User user = getUser();
 
     Mockito.when(userRepository.save(Mockito.any())).thenReturn(user);
 
@@ -78,17 +77,13 @@ class UserServiceTest {
 
   @Test
   void testSaveUser_WhenUserNotFound() {
-    UserDTO user = getUserDTO();
+    User user = getUser();
 
     User actualUser = userService.loginUser(user);
     Assertions.assertNull(actualUser);
   }
 
   private User getUser() {
-    return User.builder().userId("userId").email("userMail").build();
-  }
-
-  private UserDTO getUserDTO() {
-    return UserDTO.builder().id("userId").email("userMail").build();
+    return User.builder().userId(1).email("userMail").build();
   }
 }

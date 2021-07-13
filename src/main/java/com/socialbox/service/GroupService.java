@@ -8,19 +8,19 @@ import com.socialbox.model.GroupMovie;
 import java.util.List;
 
 public interface GroupService {
-  List<GroupDTO> getAllGroups(List<String> groupIds);
+  List<GroupDTO> getAllGroups(List<Integer> groupIds);
 
-  Group getGroup(String id);
+  Group getGroup(Integer id);
 
   Group saveGroup(Group group);
 
-  Group createGroup(GroupDTO group);
+  Group createGroup(Group group);
 
   List<GroupMovie> saveMovie(List<GroupMovie> groupMovies);
 
-  InviteDTO sendInvite(String groupId, String userId);
+  InviteDTO sendInvite(Integer groupId, Integer userId);
 
-  Group addUserToGroup(String groupId, String userId);
+  Group addUserToGroup(Integer groupId, Integer userId);
 
-  Group removeUserFromGroup(String groupId, String userId);
+  Group removeUserFromGroup(Integer groupId, Integer userId);
 }

@@ -1,6 +1,5 @@
 package com.socialbox.service.impl;
 
-import com.socialbox.dto.UserDTO;
 import com.socialbox.dto.UserMovieDTO;
 import com.socialbox.model.Movie;
 import com.socialbox.model.User;
@@ -35,7 +34,7 @@ public class UserServiceImpl implements UserService {
   }
 
   @Override
-  public User getUserById(String id) {
+  public User getUserById(Integer id) {
     Optional<User> userOptional = this.userRepository.findById(id);
     userOptional.ifPresent(user -> log.info("Found user: {}", user));
     if (!userOptional.isPresent()) {
@@ -46,21 +45,14 @@ public class UserServiceImpl implements UserService {
   }
 
   @Override
-  public User loginUser(UserDTO user) {
+  public User loginUser(User user) {
+    Optional<User> userOptional;
 
-    Optional<User> userOptional = this.userRepository.findById(user.getId());
+    if (user.getUserId() != null)
+      userOptional = this.userRepository.findById(user.getUserId());
+    else userOptional = Optional.empty();
 
-    return userOptional.orElseGet(
-        () -> this.userRepository.save(
-            User.builder()
-                .userId(user.getId())
-                .email(user.getEmail())
-                .groups(new ArrayList<>())
-                .owningGroup(new ArrayList<>())
-                .photoURL(user.getPhotoURL())
-                .personalMovieList(new ArrayList<>())
-                .sharedMovieList(new ArrayList<>())
-                .build()));
+    return userOptional.orElseGet(() -> this.userRepository.save(user));
   }
 
   @Override
@@ -69,7 +61,7 @@ public class UserServiceImpl implements UserService {
   }
 
   @Override
-  public List<UserMovieDTO> getMovies(String id) {
+  public List<UserMovieDTO> getMovies(Integer id) {
     Optional<User> userOptional = this.userRepository.findById(id);
     User currentUser = userOptional.orElse(null);
 
