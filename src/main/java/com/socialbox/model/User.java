@@ -24,7 +24,7 @@ import java.util.List;
 @AllArgsConstructor
 @Builder
 @Entity
-@Table(name = "user")
+@Table(name = "users")
 @JsonIdentityInfo(generator = ObjectIdGenerators.IntSequenceGenerator.class)
 public class User {
 
