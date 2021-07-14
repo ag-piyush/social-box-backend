@@ -54,7 +54,7 @@ public class Movie {
   @Column(name = "tmdb_id", nullable = false)
   private String tmdbId;
 
-  @OneToMany(targetEntity = Review.class, mappedBy = "movie", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+  @OneToMany(targetEntity = Review.class, mappedBy = "movie", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
   private List<Review> reviews;
 
   @ManyToOne

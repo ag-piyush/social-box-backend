@@ -43,10 +43,10 @@ public class User {
   @Column(name = "email", nullable = false)
   private String email;
 
-  @OneToMany(targetEntity = UserRatings.class, mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+  @OneToMany(targetEntity = UserRatings.class, mappedBy = "user", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
   private List<UserRatings> personalMovieList;
 
-  @OneToMany(targetEntity = Movie.class, mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+  @OneToMany(targetEntity = Movie.class, mappedBy = "user", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
   private List<Movie> sharedMovieList;
 
   @ManyToMany(fetch = FetchType.LAZY,
@@ -55,7 +55,7 @@ public class User {
   @ToString.Exclude
   private List<Group> groups;
 
-  @OneToMany(targetEntity = Group.class, mappedBy = "admin", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+  @OneToMany(targetEntity = Group.class, mappedBy = "admin", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
   @ToString.Exclude
   private List<Group> owningGroup;
 }
