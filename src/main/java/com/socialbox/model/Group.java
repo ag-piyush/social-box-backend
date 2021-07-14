@@ -21,6 +21,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.util.List;
+import lombok.ToString;
 
 @Data
 @NoArgsConstructor
@@ -46,6 +47,7 @@ public class Group {
   private String photoURL;
 
   @OneToMany(targetEntity = GroupMovie.class, mappedBy = "group", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+  @ToString.Exclude
   private List<GroupMovie> movieList;
 
   @ManyToMany(fetch = FetchType.LAZY,
@@ -61,5 +63,6 @@ public class Group {
       CascadeType.REFRESH
   })
   @JoinColumn(name = "admin_id", nullable = false)
+  @ToString.Exclude
   private User admin;
 }

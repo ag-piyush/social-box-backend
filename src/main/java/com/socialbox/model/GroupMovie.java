@@ -1,5 +1,7 @@
 package com.socialbox.model;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -16,6 +18,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 @Data
 @NoArgsConstructor
@@ -23,6 +26,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @Entity
 @Table(name = "group_movie")
+@JsonIdentityInfo(generator = ObjectIdGenerators.IntSequenceGenerator.class)
 // Todo: This entity is not being stored separately
 public class GroupMovie {
 
@@ -48,5 +52,6 @@ public class GroupMovie {
 
   @ManyToOne
   @JoinColumn(name = "groups_id", nullable = false)
+  @ToString.Exclude
   private Group group;
 }
