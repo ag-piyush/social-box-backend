@@ -44,7 +44,11 @@ public class GroupController {
 
   @PostMapping
   public ResponseEntity<GroupDTO> saveGroup(@RequestBody GroupDTO group) {
-    return ResponseEntity.ok(this.groupService.saveGroup(group));
+    GroupDTO groupDTO = this.groupService.saveGroup(group);
+
+    if (groupDTO == null) return ResponseEntity.badRequest().build();
+
+    return ResponseEntity.ok(groupDTO);
   }
 
   @PostMapping("/movie")

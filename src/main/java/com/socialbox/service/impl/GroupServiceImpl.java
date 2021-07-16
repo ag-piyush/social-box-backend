@@ -42,6 +42,7 @@ public class GroupServiceImpl implements GroupService {
 
   @Override
   public List<GroupDTO> getAllGroups(List<Integer> groupIds) {
+    log.info("Getting groups for: {}", groupIds);
     List<Group> groupList = new ArrayList<>(this.groupRepository.findAllById(groupIds));
     List<GroupDTO> groupDTOList = new ArrayList<>();
 
@@ -62,8 +63,10 @@ public class GroupServiceImpl implements GroupService {
   public GroupDTO getGroupById(Integer id) {
     Optional<Group> groupOptional = this.groupRepository.findById(id);
     if (!groupOptional.isPresent()) {
+      log.debug("No group found for id: {}", id);
       return null;
     }
+
     Group group = groupOptional.get();
     List<GroupMovieDTO> groupMovieDTOS = group.getMovieList()
         .stream()
@@ -98,7 +101,14 @@ public class GroupServiceImpl implements GroupService {
 
   @Override
   public GroupDTO saveGroup(GroupDTO groupDTO) {
+    log.info("Saving group for id: {}", groupDTO.getId());
     User admin = this.userService.getUser(groupDTO.getAdminId());
+    if (admin == null) {
+      log.error("No user found with id: {}", groupDTO.getAdminId());
+      return null;
+    }
+
+    log.info("Fetched admin: {}", admin);
     Group group = this.groupRepository.save(Group.builder()
         .memberCount(groupDTO.getMemberCount())
         .name(groupDTO.getName())

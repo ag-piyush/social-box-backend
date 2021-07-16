@@ -52,6 +52,7 @@ public class MovieServiceImpl implements MovieService {
 
   @Override
   public List<MovieDTO> getMoviesByIds(List<Integer> movieIds) {
+    log.info("Fetching movies for ids: {}", movieIds);
     return this.movieRepository.findAllById(movieIds).stream().map(m -> MovieDTO.builder()
         .id(m.getId())
         .votes(m.getVotes())
@@ -101,6 +102,7 @@ public class MovieServiceImpl implements MovieService {
 
   @Override
   public MovieDTO saveMovie(MovieDTO movieDTO) {
+    log.info("Saving movie with id: {}", movieDTO.getId());
     Movie movie = this.movieRepository.save(Movie.builder()
         .name(movieDTO.getName())
         .photoURL(movieDTO.getPhotoURL())
