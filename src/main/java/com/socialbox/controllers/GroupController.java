@@ -1,15 +1,20 @@
 package com.socialbox.controllers;
 
 import com.socialbox.dto.GroupDTO;
+import com.socialbox.dto.GroupMovieDTO;
 import com.socialbox.dto.InviteDTO;
-import com.socialbox.model.Group;
-import com.socialbox.model.GroupMovie;
 import com.socialbox.service.GroupService;
+import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 @RequestMapping("/group")
 @RestController
@@ -23,14 +28,14 @@ public class GroupController {
   }
 
   @GetMapping
-  public List<GroupDTO> getGroups(@RequestParam("ids") List<Integer> ids) {
-    return this.groupService.getAllGroups(ids);
+  public ResponseEntity<List<GroupDTO>> getGroups(@RequestParam("ids") List<Integer> ids) {
+    return ResponseEntity.ok(this.groupService.getAllGroups(ids));
   }
 
   @GetMapping("/{id}")
-  public ResponseEntity<Group> getGroup(@PathVariable("id") Integer id) {
+  public ResponseEntity<GroupDTO> getGroup(@PathVariable("id") Integer id) {
 
-    Group foundGroup = this.groupService.getGroup(id);
+    GroupDTO foundGroup = this.groupService.getGroupById(id);
 
     if (foundGroup == null) return ResponseEntity.status(401).build();
 
@@ -38,13 +43,13 @@ public class GroupController {
   }
 
   @PostMapping
-  public Group saveGroup(@RequestBody Group group) {
-    return this.groupService.createGroup(group);
+  public ResponseEntity<GroupDTO> saveGroup(@RequestBody GroupDTO group) {
+    return ResponseEntity.ok(this.groupService.saveGroup(group));
   }
 
   @PostMapping("/movie")
-  public List<GroupMovie> addGroupMovie(@RequestBody List<GroupMovie> groupMovies) {
-    return this.groupService.saveMovie(groupMovies);
+  public ResponseEntity<List<GroupMovieDTO>> addGroupMovie(@RequestBody List<GroupMovieDTO> groupMovies) {
+    return ResponseEntity.ok(this.groupService.saveMovie(groupMovies));
   }
 
   @GetMapping("/invite")
@@ -60,9 +65,9 @@ public class GroupController {
   }
 
   @PostMapping("/{id}/user")
-  public ResponseEntity<Group> addUserToGroup(@PathVariable("id") Integer groupId,
+  public ResponseEntity<GroupDTO> addUserToGroup(@PathVariable("id") Integer groupId,
       @RequestParam("userId") Integer userId) {
-    Group group = this.groupService.addUserToGroup(groupId, userId);
+    GroupDTO group = this.groupService.addUserToGroup(groupId, userId);
 
     if (group == null) return ResponseEntity.notFound().build();
 
@@ -70,9 +75,9 @@ public class GroupController {
   }
 
   @DeleteMapping("/{id}/user")
-  public ResponseEntity<Group> removeUserFromGroup(@PathVariable("id") Integer groupId,
+  public ResponseEntity<GroupDTO> removeUserFromGroup(@PathVariable("id") Integer groupId,
       @RequestParam("userId") Integer userId) {
-    Group group = this.groupService.removeUserFromGroup(groupId, userId);
+    GroupDTO group = this.groupService.removeUserFromGroup(groupId, userId);
 
     if (group == null) return ResponseEntity.notFound().build();
 

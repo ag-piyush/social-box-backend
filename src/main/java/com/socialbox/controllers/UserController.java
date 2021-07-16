@@ -1,7 +1,7 @@
 package com.socialbox.controllers;
 
+import com.socialbox.dto.UserDTO;
 import com.socialbox.dto.UserMovieDTO;
-import com.socialbox.model.User;
 import com.socialbox.service.UserService;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,14 +25,14 @@ public class UserController {
   }
 
   @GetMapping
-  public List<User> getAllUsers() {
-    return this.userService.getAllUsers();
+  public ResponseEntity<List<UserDTO>> getAllUsers() {
+    return ResponseEntity.ok(this.userService.getAllUsers());
   }
 
   @GetMapping("/{id}")
-  public ResponseEntity<User> getUserById(@PathVariable("id") Integer id) {
+  public ResponseEntity<UserDTO> getUserById(@PathVariable("id") Integer id) {
 
-    User foundUser = this.userService.getUserById(id);
+    UserDTO foundUser = this.userService.getUserById(id);
 
     if (foundUser == null) return ResponseEntity.status(401).build();
 
@@ -40,9 +40,9 @@ public class UserController {
   }
 
   @PostMapping
-  public ResponseEntity<User> saveUser(@RequestBody User user) {
+  public ResponseEntity<UserDTO> saveUser(@RequestBody UserDTO user) {
 
-    User createdUser = this.userService.loginUser(user);
+    UserDTO createdUser = this.userService.loginUser(user);
 
     return ResponseEntity.ok(createdUser);
   }
