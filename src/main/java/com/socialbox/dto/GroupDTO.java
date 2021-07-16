@@ -1,6 +1,6 @@
 package com.socialbox.dto;
 
-import com.socialbox.model.User;
+import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -15,5 +15,6 @@ public class GroupDTO {
   private String name;
   private String photoURL;
   private int memberCount;
-  private User admin;
+  private Integer adminId;
+  private List<GroupMovieDTO> groupMovieDTOList;
 }

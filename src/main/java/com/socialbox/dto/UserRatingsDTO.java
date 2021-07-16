@@ -1,6 +1,5 @@
 package com.socialbox.dto;
 
-import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -10,11 +9,12 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class MovieDTO {
+public class UserRatingsDTO {
   private Integer id;
-  private String name;
-  private String photoURL;
-  private double movieRating;
-  private int votes;
-  private List<ReviewDTO> reviews;
+
+  private double ratings;
+
+  private Integer userDTO;
+
+  private Integer movieDTO;
 }

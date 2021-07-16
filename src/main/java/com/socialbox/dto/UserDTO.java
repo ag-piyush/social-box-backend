@@ -1,5 +1,6 @@
 package com.socialbox.dto;
 
+import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -14,4 +15,6 @@ public class UserDTO {
   private String name;
   private String email;
   private String photoURL;
+  private List<UserRatingsDTO> personalMovieList;
+  private List<GroupDTO> groups;
 }
