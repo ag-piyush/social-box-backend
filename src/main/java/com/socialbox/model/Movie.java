@@ -51,7 +51,7 @@ public class Movie {
   @ElementCollection(targetClass = Genre.class)
   private List<Genre> genre;
 
-  @Column(name = "tmdb_id", nullable = false)
+  @Column(name = "tmdb_id")
   private String tmdbId;
 
   @OneToMany(targetEntity = Review.class, mappedBy = "movie", fetch = FetchType.LAZY, cascade = CascadeType.ALL)

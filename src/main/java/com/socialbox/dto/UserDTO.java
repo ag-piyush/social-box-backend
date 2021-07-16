@@ -13,6 +13,7 @@ import lombok.NoArgsConstructor;
 public class UserDTO {
   private Integer id;
   private String name;
+  private String displayName;
   private String email;
   private String photoURL;
   private List<UserRatingsDTO> personalMovieList;

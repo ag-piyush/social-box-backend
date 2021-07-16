@@ -20,6 +20,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 @Data
 @NoArgsConstructor
@@ -53,6 +54,7 @@ public class Group {
       name = "user_groups",
       joinColumns = @JoinColumn(name = "groups_id"),
       inverseJoinColumns = @JoinColumn(name = "users_id"))
+  @ToString.Exclude
   private List<User> users;
 
   @ManyToOne(cascade = {
@@ -60,5 +62,6 @@ public class Group {
       CascadeType.REFRESH
   })
   @JoinColumn(name = "admin_id", nullable = false)
+  @ToString.Exclude
   private User admin;
 }

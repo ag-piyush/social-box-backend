@@ -18,6 +18,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.util.List;
+import lombok.ToString;
 
 @Data
 @NoArgsConstructor
@@ -33,8 +34,11 @@ public class User {
   @Column(name = "id", nullable = false)
   private Integer userId;
 
-  @Column(name = "name", nullable = false, unique = true)
+  @Column(name = "name", nullable = false)
   private String name;
+
+  @Column(name = "display_name", nullable = false, unique = true)
+  private String displayName;
 
   @Column(name = "photo_url")
   private String photoURL;
@@ -51,8 +55,10 @@ public class User {
   @ManyToMany(fetch = FetchType.LAZY,
       cascade = CascadeType.ALL,
       mappedBy = "users")
+  @ToString.Exclude
   private List<Group> groups;
 
   @OneToMany(targetEntity = Group.class, mappedBy = "admin", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+  @ToString.Exclude
   private List<Group> owningGroup;
 }
