@@ -1,19 +1,21 @@
 package com.socialbox.service;
 
+import com.socialbox.dto.UserDTO;
 import com.socialbox.dto.UserMovieDTO;
 import com.socialbox.model.User;
-
 import java.util.List;
 
 public interface UserService {
 
-  List<User> getAllUsers();
+  List<UserDTO> getAllUsers();
 
-  User getUserById(Integer id);
+  UserDTO getUserById(Integer id);
 
-  User loginUser(User user);
+  User getUser(Integer id);
 
-  User saveUser(User user);
+  UserDTO loginUser(UserDTO user);
 
   List<UserMovieDTO> getMovies(Integer id);
+
+  User updateUser(User user);
 }
