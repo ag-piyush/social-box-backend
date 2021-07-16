@@ -38,6 +38,7 @@ public class UserServiceImpl implements UserService {
         .map(u -> UserDTO.builder()
             .id(u.getUserId())
             .name(u.getName())
+            .displayName(u.getDisplayName())
             .email(u.getEmail())
             .photoURL(u.getPhotoURL())
             .build())
@@ -57,6 +58,7 @@ public class UserServiceImpl implements UserService {
     return UserDTO.builder()
         .id(user.getUserId())
         .name(user.getName())
+        .displayName(user.getDisplayName())
         .email(user.getEmail())
         .photoURL(user.getPhotoURL())
         .build();
@@ -85,12 +87,13 @@ public class UserServiceImpl implements UserService {
 
     if (!userOptional.isPresent()) {
       log.error("User not found with id: {}", userDTO.getId());
-      this.userRepository.save(User.builder()
+      User save = this.userRepository.save(User.builder()
           .userId(userDTO.getId())
           .name(userDTO.getName())
           .email(userDTO.getEmail())
           .photoURL(userDTO.getPhotoURL())
           .build());
+      userDTO.setId(save.getUserId());
       return userDTO;
     }
 
@@ -98,6 +101,7 @@ public class UserServiceImpl implements UserService {
     return UserDTO.builder()
         .id(user.getUserId())
         .name(user.getName())
+        .displayName(user.getDisplayName())
         .email(user.getEmail())
         .photoURL(user.getPhotoURL())
         .groups(user.getGroups().stream().map(g -> GroupDTO.builder()
@@ -167,5 +171,19 @@ public class UserServiceImpl implements UserService {
 
   @Override public User updateUser(User user) {
     return this.userRepository.save(user);
+  }
+
+  @Override public UserDTO saveSettingsForUser(UserDTO userDTO, Integer id) {
+    Optional<User> userOptional = this.userRepository.findById(id);
+    if (!userOptional.isPresent()) {
+      log.debug("User not found with id: {}", id);
+      return null;
+    }
+
+    User user = userOptional.get();
+    user.setDisplayName(userDTO.getDisplayName());
+    user.setPhotoURL(userDTO.getPhotoURL());
+    this.userRepository.save(user);
+    return userDTO;
   }
 }

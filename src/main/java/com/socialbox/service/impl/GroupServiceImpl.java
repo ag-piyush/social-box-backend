@@ -14,6 +14,8 @@ import com.socialbox.service.GroupService;
 import com.socialbox.service.InviteLinkService;
 import com.socialbox.service.UserService;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -112,8 +114,13 @@ public class GroupServiceImpl implements GroupService {
     Group group = this.groupRepository.save(Group.builder()
         .memberCount(groupDTO.getMemberCount())
         .name(groupDTO.getName())
+        .users(Collections.singletonList(admin))
         .admin(admin)
         .build());
+    List<Group> groups = admin.getGroups();
+    if (groups == null) {
+      admin.setGroups(new ArrayList<>());
+    }
     groupDTO.setId(group.getId());
     return groupDTO;
   }

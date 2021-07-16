@@ -18,4 +18,6 @@ public interface UserService {
   List<UserMovieDTO> getMovies(Integer id);
 
   User updateUser(User user);
+
+  UserDTO saveSettingsForUser(UserDTO userDTO, Integer id);
 }

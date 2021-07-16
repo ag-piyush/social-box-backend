@@ -56,4 +56,14 @@ public class UserController {
 
     return ResponseEntity.ok(movieDTOS);
   }
+
+  @PostMapping("/{id}/settings")
+  public ResponseEntity<UserDTO> updateSettingsForUser(@PathVariable("id") Integer id, @RequestBody UserDTO userDTO) {
+    UserDTO updatedUserDTO = this.userService.saveSettingsForUser(userDTO, id);
+    if (updatedUserDTO == null) {
+      return ResponseEntity.badRequest().build();
+    }
+
+    return ResponseEntity.ok(updatedUserDTO);
+  }
 }
