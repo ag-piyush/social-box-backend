@@ -10,11 +10,18 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class MovieDTO {
+public class GroupMovieDTO {
   private Integer id;
-  private String name;
-  private String photoURL;
-  private double movieRating;
-  private int votes;
+
   private List<ReviewDTO> reviews;
+
+  private String name;
+
+  private String photoURL;
+
+  private double rating;
+
+  private int votes;
+
+  private Integer groupId;
 }

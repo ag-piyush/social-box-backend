@@ -30,7 +30,7 @@ dependencies {
     annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
 
     // Postgres
-    implementation 'org.postgresql:postgresql'
+    runtimeOnly 'mysql:mysql-connector-java'
 
     // Lombok
     compileOnly 'org.projectlombok:lombok'

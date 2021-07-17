@@ -2,15 +2,16 @@ package com.socialbox.service.impl;
 
 import com.socialbox.config.TmdbConfig;
 import com.socialbox.dto.MovieDTO;
+import com.socialbox.dto.ReviewDTO;
+import com.socialbox.dto.Tmdb;
 import com.socialbox.dto.TmdbDTO;
 import com.socialbox.model.Movie;
-import com.socialbox.dto.Tmdb;
 import com.socialbox.repository.MovieRepository;
 import com.socialbox.service.MovieService;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-
+import java.util.stream.Collectors;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
@@ -50,23 +51,70 @@ public class MovieServiceImpl implements MovieService {
   }
 
   @Override
-  public List<Movie> getMoviesByIds(List<Integer> movieIds) {
-    return new ArrayList<>(this.movieRepository.findAllById(movieIds));
+  public List<MovieDTO> getMoviesByIds(List<Integer> movieIds) {
+    log.info("Fetching movies for ids: {}", movieIds);
+    return this.movieRepository.findAllById(movieIds).stream().map(m -> MovieDTO.builder()
+        .id(m.getId())
+        .votes(m.getVotes())
+        .name(m.getName())
+        .photoURL(m.getPhotoURL())
+        .movieRating(m.getRating())
+        .reviews(m.getReviews()
+            .stream()
+            .map(r -> ReviewDTO.builder()
+                .id(r.getId())
+                .groupMovieId(r.getGroupMovie().getId())
+                .userReviews(r.getUserReviews())
+                .movieId(r.getMovie().getId())
+                .build())
+            .collect(Collectors.toList()))
+        .build()).
+        collect(Collectors.toList());
   }
 
   @Override
-  public Movie getMovie(Integer id) {
+  public MovieDTO getMovie(Integer id) {
     Optional<Movie> movieOptional = this.movieRepository.findById(id);
-    return movieOptional.orElse(null);
+    if (!movieOptional.isPresent()) {
+      log.debug("Movie not found with id: {}", id);
+      return null;
+    }
+
+    Movie movie = movieOptional.get();
+    return MovieDTO.builder()
+        .id(movie.getId())
+        .votes(movie.getVotes())
+        .name(movie.getName())
+        .photoURL(movie.getPhotoURL())
+        .movieRating(movie.getRating())
+        .reviews(movie.getReviews()
+            .stream()
+            .map(r -> ReviewDTO.builder()
+                .id(r.getId())
+                .groupMovieId(r.getGroupMovie().getId())
+                .userReviews(r.getUserReviews())
+                .movieId(r.getMovie().getId())
+                .build())
+            .collect(
+                Collectors.toList()))
+        .build();
   }
 
   @Override
-  public Movie saveMovie(Movie movie) {
-    return this.movieRepository.save(movie);
+  public MovieDTO saveMovie(MovieDTO movieDTO) {
+    log.info("Saving movie with id: {}", movieDTO.getId());
+    Movie movie = this.movieRepository.save(Movie.builder()
+        .name(movieDTO.getName())
+        .photoURL(movieDTO.getPhotoURL())
+        .rating(movieDTO.getMovieRating())
+        .votes(movieDTO.getVotes())
+        .build());
+    movieDTO.setId(movie.getId());
+    return movieDTO;
   }
 
   @Override
-  public List<Movie> searchMovie(String name) {
+  public List<MovieDTO> searchMovie(String name) {
     String url =
         tmdbConfig.getBaseUrl() + "/search/movie?api_key=" + tmdbConfig.getKey() + "&query=" + name;
     RestTemplate restTemplate = new RestTemplate();
@@ -96,6 +144,23 @@ public class MovieServiceImpl implements MovieService {
       movieList.add(tempMovie);
     }
 
-    return this.movieRepository.saveAll(movieList);
+    List<Movie> movies = this.movieRepository.saveAll(movieList);
+    return movies.stream().map(m -> MovieDTO.builder()
+        .id(m.getId())
+        .votes(m.getVotes())
+        .name(m.getName())
+        .photoURL(m.getPhotoURL())
+        .movieRating(m.getRating())
+        .reviews(m.getReviews()
+            .stream()
+            .map(r -> ReviewDTO.builder()
+                .id(r.getId())
+                .groupMovieId(r.getGroupMovie().getId())
+                .userReviews(r.getUserReviews())
+                .movieId(r.getMovie().getId())
+                .build())
+            .collect(Collectors.toList()))
+        .build()).
+        collect(Collectors.toList());
   }
 }
