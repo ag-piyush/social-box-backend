@@ -46,7 +46,7 @@ public class Group {
   @Column(name = "photo_url")
   private String photoURL;
 
-  @OneToMany(targetEntity = GroupMovie.class, mappedBy = "group", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+  @OneToMany(targetEntity = GroupMovie.class, mappedBy = "group", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
   @ToString.Exclude
   private List<GroupMovie> movieList;
 
@@ -56,6 +56,7 @@ public class Group {
       name = "user_groups",
       joinColumns = @JoinColumn(name = "groups_id"),
       inverseJoinColumns = @JoinColumn(name = "users_id"))
+  @ToString.Exclude
   private List<User> users;
 
   @ManyToOne(cascade = {

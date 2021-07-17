@@ -35,7 +35,7 @@ public class GroupMovie {
   @GeneratedValue(strategy = GenerationType.AUTO)
   private Integer id;
 
-  @OneToMany(targetEntity = Review.class, mappedBy = "groupMovie", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+  @OneToMany(targetEntity = Review.class, mappedBy = "groupMovie", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
   private List<Review> reviews;
 
   @Column(name = "name", nullable = false)

@@ -84,6 +84,6 @@ class UserServiceTest {
   }
 
   private User getUser() {
-    return User.builder().userId(1).email("userMail").build();
+    return new User(1, "name", "userEmail", null, null, null, null, null);
   }
 }
