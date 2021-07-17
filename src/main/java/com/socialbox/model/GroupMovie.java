@@ -3,6 +3,7 @@ package com.socialbox.model;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import java.util.List;
+import java.util.Set;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -36,7 +37,7 @@ public class GroupMovie {
   private Integer id;
 
   @OneToMany(targetEntity = Review.class, mappedBy = "groupMovie", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-  private List<Review> reviews;
+  private Set<Review> reviews;
 
   @Column(name = "name", nullable = false)
   private String name;

@@ -1,6 +1,8 @@
 package com.socialbox.model;
 
 import com.socialbox.enums.Genre;
+import java.util.List;
+import java.util.Set;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.ElementCollection;
@@ -19,8 +21,6 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
-import java.util.List;
 
 @Data
 @NoArgsConstructor
@@ -55,7 +55,7 @@ public class Movie {
   private String tmdbId;
 
   @OneToMany(targetEntity = Review.class, mappedBy = "movie", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-  private List<Review> reviews;
+  private Set<Review> reviews;
 
   @ManyToOne
   @JoinColumn(name = "user_id")

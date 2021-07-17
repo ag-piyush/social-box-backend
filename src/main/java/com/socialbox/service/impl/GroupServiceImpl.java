@@ -16,8 +16,10 @@ import com.socialbox.service.UserService;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Collectors;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -114,12 +116,12 @@ public class GroupServiceImpl implements GroupService {
     Group group = this.groupRepository.save(Group.builder()
         .memberCount(groupDTO.getMemberCount())
         .name(groupDTO.getName())
-        .users(Collections.singletonList(admin))
+        .users(Collections.singleton(admin))
         .admin(admin)
         .build());
-    List<Group> groups = admin.getGroups();
+    Set<Group> groups = admin.getGroups();
     if (groups == null) {
-      admin.setGroups(new ArrayList<>());
+      admin.setGroups(new HashSet<>());
     }
     groupDTO.setId(group.getId());
     return groupDTO;
@@ -147,7 +149,7 @@ public class GroupServiceImpl implements GroupService {
 
     if (currentGroup.getMovieList() == null) {
       log.info("Empty movie list in group!");
-      currentGroup.setMovieList(new ArrayList<>());
+      currentGroup.setMovieList(new HashSet<>());
     }
 
     List<GroupMovie> groupMovies = this.groupMovieRepository.saveAll(groupMovieDTOS.stream()
@@ -207,7 +209,7 @@ public class GroupServiceImpl implements GroupService {
 
     if (user.getGroups() == null) {
       log.info("Creating a new groupList for user: {}", userId);
-      user.setGroups(new ArrayList<>());
+      user.setGroups(new HashSet<>());
     }
     Group group = groupOptional.get();
     user.getGroups().add(group);
@@ -215,7 +217,7 @@ public class GroupServiceImpl implements GroupService {
 
     if (group.getUsers() == null) {
       log.info("Creating a new userList for group: {}", groupId);
-      group.setUsers(new ArrayList<>());
+      group.setUsers(new HashSet<>());
     }
     group.getUsers().add(user);
     group = this.updateGroup(group);

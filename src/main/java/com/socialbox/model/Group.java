@@ -3,6 +3,7 @@ package com.socialbox.model;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import java.util.List;
+import java.util.Set;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -47,7 +48,7 @@ public class Group {
 
   @OneToMany(targetEntity = GroupMovie.class, mappedBy = "group", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
   @ToString.Exclude
-  private List<GroupMovie> movieList;
+  private Set<GroupMovie> movieList;
 
   @ManyToMany(fetch = FetchType.LAZY,
       cascade = CascadeType.ALL)
@@ -56,7 +57,7 @@ public class Group {
       joinColumns = @JoinColumn(name = "groups_id"),
       inverseJoinColumns = @JoinColumn(name = "users_id"))
   @ToString.Exclude
-  private List<User> users;
+  private Set<User> users;
 
   @ManyToOne(cascade = {
       CascadeType.MERGE,

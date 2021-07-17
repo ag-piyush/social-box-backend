@@ -10,6 +10,7 @@ import com.socialbox.model.User;
 import com.socialbox.repository.UserRepository;
 import com.socialbox.service.MovieService;
 import com.socialbox.service.UserService;
+import java.sql.SQLIntegrityConstraintViolationException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -177,7 +178,14 @@ public class UserServiceImpl implements UserService {
     User user = userOptional.get();
     user.setDisplayName(userDTO.getDisplayName());
     user.setPhotoURL(userDTO.getPhotoURL());
-    this.userRepository.save(user);
+
+    try {
+      this.userRepository.save(user);
+    } catch (Exception e) {
+      log.error("Not an unique name with exception:", e);
+      return null;
+    }
+
     return userDTO;
   }
 }

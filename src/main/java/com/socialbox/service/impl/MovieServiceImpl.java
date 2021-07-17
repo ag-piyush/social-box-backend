@@ -9,6 +9,7 @@ import com.socialbox.model.Movie;
 import com.socialbox.repository.MovieRepository;
 import com.socialbox.service.MovieService;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -137,7 +138,7 @@ public class MovieServiceImpl implements MovieService {
               .photoURL(tmdb.getPoster_path())
               .rating(tmdb.getVote_average())
               .votes(tmdb.getVote_count())
-              .reviews(new ArrayList<>())
+              .reviews(new HashSet<>())
               .tmdbId(tmdb.getId())
               .build();
 

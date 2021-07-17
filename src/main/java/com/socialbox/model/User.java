@@ -28,7 +28,7 @@ import lombok.ToString;
 @AllArgsConstructor
 @Builder
 @Entity
-@Table(name = "user")
+@Table(name = "users")
 @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "userId", scope = User.class)
 public class User {
 
@@ -40,7 +40,7 @@ public class User {
   @Column(name = "name", nullable = false)
   private String name;
 
-  @Column(name = "display_name", nullable = false, unique = true)
+  @Column(name = "display_name", unique = true)
   private String displayName;
 
   @Column(name = "photo_url")
@@ -50,10 +50,10 @@ public class User {
   private String email;
 
   @OneToMany(targetEntity = UserRatings.class, mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-  private List<UserRatings> personalMovieList;
+  private Set<UserRatings> personalMovieList;
 
   @OneToMany(targetEntity = Movie.class, mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-  private List<Movie> sharedMovieList;
+  private Set<Movie> sharedMovieList;
 
   @ManyToMany(fetch = FetchType.LAZY,
       cascade = CascadeType.ALL,
