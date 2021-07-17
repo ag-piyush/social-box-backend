@@ -4,6 +4,7 @@ import com.socialbox.enums.Genre;
 import java.util.List;
 import java.util.Set;
 import javax.persistence.CascadeType;
+import javax.persistence.CollectionTable;
 import javax.persistence.Column;
 import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
@@ -49,6 +50,7 @@ public class Movie {
 
   @Enumerated(EnumType.STRING)
   @ElementCollection(targetClass = Genre.class)
+  @CollectionTable(name = "Movie_genre", joinColumns = @JoinColumn(name = "movie_id"))
   private List<Genre> genre;
 
   @Column(name = "tmdb_id")

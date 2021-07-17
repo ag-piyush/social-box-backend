@@ -5,6 +5,7 @@ import com.socialbox.dto.MovieDTO;
 import com.socialbox.dto.ReviewDTO;
 import com.socialbox.dto.Tmdb;
 import com.socialbox.dto.TmdbDTO;
+import com.socialbox.enums.Genre;
 import com.socialbox.model.Movie;
 import com.socialbox.repository.MovieRepository;
 import com.socialbox.service.MovieService;
@@ -15,6 +16,9 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
@@ -35,8 +39,9 @@ public class MovieServiceImpl implements MovieService {
   }
 
   @Override
-  public List<MovieDTO> getAllMovies() {
-    List<Movie> movieList = this.movieRepository.findAll();
+  public List<MovieDTO> getAllMovies(Genre genre) {
+    Pageable firstPage = PageRequest.of(0, 20);
+    Page<Movie> movieList = this.movieRepository.getMoviesByGenreWithPagination(genre, firstPage);
     List<MovieDTO> movieDTOList = new ArrayList<>();
 
     for (Movie movie : movieList) {
@@ -132,12 +137,18 @@ public class MovieServiceImpl implements MovieService {
     List<Movie> movieList = new ArrayList<>();
 
     for (Tmdb tmdb : results) {
+      List<Genre> genres =
+          tmdb.getGenre_ids()
+              .stream()
+              .map(Genre::getGenre)
+              .collect(Collectors.toList());
       Movie tempMovie =
           Movie.builder()
               .name(tmdb.getTitle())
               .photoURL(tmdb.getPoster_path())
               .rating(tmdb.getVote_average())
               .votes(tmdb.getVote_count())
+              .genre(genres)
               .reviews(new HashSet<>())
               .tmdbId(tmdb.getId())
               .build();
@@ -163,5 +174,21 @@ public class MovieServiceImpl implements MovieService {
             .collect(Collectors.toList()))
         .build()).
         collect(Collectors.toList());
+  }
+
+  @Override public List<MovieDTO> searchMovieByGenre(Genre genre, String name) {
+    List<Movie> movieList = this.movieRepository.getMoviesByGenreAndName(genre, name);
+    List<MovieDTO> movieDTOList = new ArrayList<>();
+
+    for (Movie movie : movieList) {
+      MovieDTO movieDTO =
+          MovieDTO.builder()
+              .id(movie.getId())
+              .name(movie.getName())
+              .movieRating(movie.getRating())
+              .build();
+      movieDTOList.add(movieDTO);
+    }
+    return movieDTOList;
   }
 }

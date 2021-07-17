@@ -1,6 +1,7 @@
 package com.socialbox.controllers;
 
 import com.socialbox.dto.MovieDTO;
+import com.socialbox.enums.Genre;
 import com.socialbox.service.MovieService;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,8 +26,8 @@ public class MovieController {
   }
 
   @GetMapping
-  public ResponseEntity<List<MovieDTO>> getAllMovies() {
-    return ResponseEntity.ok(this.movieService.getAllMovies());
+  public ResponseEntity<List<MovieDTO>> getAllMovies(@RequestParam("genre") Genre movies) {
+    return ResponseEntity.ok(this.movieService.getAllMovies(movies));
   }
 
   @GetMapping("/{id}")
@@ -45,7 +46,12 @@ public class MovieController {
   }
 
   @GetMapping("/search")
-  public ResponseEntity<List<MovieDTO>> searchMovie(@RequestParam("name") String name) {
+  public ResponseEntity<List<MovieDTO>> searchMovie(@RequestParam(value = "name") String name,
+      @RequestParam(value = "genre", required = false) Genre genre) {
+    if (genre != null) {
+      return ResponseEntity.ok(this.movieService.searchMovieByGenre(genre, name));
+    }
+
     return ResponseEntity.ok(this.movieService.searchMovie(name));
   }
 }
