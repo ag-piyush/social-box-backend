@@ -77,10 +77,10 @@ public class UserServiceImpl implements UserService {
 
   @Override
   public UserDTO loginUser(UserDTO userDTO) {
-    Optional<User> userOptional = this.userRepository.findByName(userDTO.getEmail());
+    Optional<User> userOptional = this.userRepository.findByEmail(userDTO.getEmail());
 
     if (!userOptional.isPresent()) {
-      log.error("Creating new user: {}", userDTO.getId());
+      log.debug("Creating new user: {}", userDTO.getId());
       User save = this.userRepository.save(User.builder()
           .userId(userDTO.getId())
           .name(userDTO.getName())
