@@ -44,7 +44,7 @@ public class UserController {
   public ResponseEntity<UserDTO> saveUser(@RequestBody UserDTO user) {
     UserDTO createdUser = this.userService.loginUser(user);
 
-    if (createdUser.getGroups() == null) {
+    if (createdUser.getDisplayName() == null || createdUser.getDisplayName().isEmpty()) {
       return ResponseEntity.status(HttpStatus.CREATED).body(createdUser);
     }
 
