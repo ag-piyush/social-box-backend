@@ -2,7 +2,6 @@ package com.socialbox.model;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
-import java.util.List;
 import java.util.Set;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -26,9 +25,8 @@ import lombok.ToString;
 @AllArgsConstructor
 @Builder
 @Entity
-@Table(name = "group_movie")
+@Table(name = "group_movie") // Todo: This entity is not being stored separately
 @JsonIdentityInfo(generator = ObjectIdGenerators.IntSequenceGenerator.class)
-// Todo: This entity is not being stored separately
 public class GroupMovie {
 
   @Id

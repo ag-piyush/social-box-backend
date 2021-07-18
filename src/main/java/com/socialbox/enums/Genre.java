@@ -3,10 +3,6 @@ package com.socialbox.enums;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
 
 public enum Genre {
   PERSONAL,
@@ -31,13 +27,6 @@ public enum Genre {
   TV_MOVIE,
   THRILLER,
   WAR;
-
-  @Id
-  @Column(name = "movie_id")
-  private int movieId;
-
-  @Column(name = "genre")
-  private String genre;
 
   public static Map<Integer, Genre> genreMap = new HashMap<>();
 
@@ -71,7 +60,7 @@ public enum Genre {
   }
 
   public static Genre getGenre(String name) {
-    for(Map.Entry<Integer, Genre> entry: genreMap.entrySet()) {
+    for (Map.Entry<Integer, Genre> entry : genreMap.entrySet()) {
       if (entry.getValue().name().toLowerCase(Locale.ROOT).equals(name)) {
         return entry.getValue();
       }

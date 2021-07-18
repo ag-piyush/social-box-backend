@@ -10,7 +10,6 @@ import com.socialbox.model.User;
 import com.socialbox.repository.UserRepository;
 import com.socialbox.service.MovieService;
 import com.socialbox.service.UserService;
-import java.sql.SQLIntegrityConstraintViolationException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;

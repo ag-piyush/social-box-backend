@@ -1,7 +1,6 @@
 package com.socialbox.model;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.JsonIdentityReference;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import java.util.Set;
 import javax.persistence.CascadeType;
@@ -20,7 +19,6 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
-import java.util.List;
 import lombok.ToString;
 
 @Data
