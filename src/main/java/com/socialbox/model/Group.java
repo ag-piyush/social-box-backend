@@ -19,6 +19,7 @@ import javax.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
@@ -56,6 +57,7 @@ public class Group {
       joinColumns = @JoinColumn(name = "groups_id"),
       inverseJoinColumns = @JoinColumn(name = "users_id"))
   @ToString.Exclude
+  @EqualsAndHashCode.Exclude
   private Set<User> users;
 
   @ManyToOne(cascade = {
@@ -64,5 +66,6 @@ public class Group {
   })
   @JoinColumn(name = "admin_id", nullable = false)
   @ToString.Exclude
+  @EqualsAndHashCode.Exclude
   private User admin;
 }

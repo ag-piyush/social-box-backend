@@ -48,9 +48,11 @@ public class User {
   private String email;
 
   @OneToMany(targetEntity = UserRatings.class, mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+  @EqualsAndHashCode.Exclude
   private Set<UserRatings> personalMovieList;
 
   @OneToMany(targetEntity = Movie.class, mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+  @EqualsAndHashCode.Exclude
   private Set<Movie> sharedMovieList;
 
   @ManyToMany(fetch = FetchType.LAZY,
@@ -62,5 +64,6 @@ public class User {
 
   @OneToMany(targetEntity = Group.class, mappedBy = "admin", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
   @ToString.Exclude
+  @EqualsAndHashCode.Exclude
   private Set<Group> owningGroup;
 }

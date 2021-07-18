@@ -21,6 +21,7 @@ import javax.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 @Data
@@ -57,6 +58,7 @@ public class Movie {
   private String tmdbId;
 
   @OneToMany(targetEntity = Review.class, mappedBy = "movie", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+  @EqualsAndHashCode.Exclude
   private Set<Review> reviews;
 
   @ManyToOne
