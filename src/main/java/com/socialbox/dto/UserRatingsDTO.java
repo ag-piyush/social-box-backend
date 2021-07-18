@@ -14,7 +14,7 @@ public class UserRatingsDTO {
 
   private double ratings;
 
-  private Integer userDTO;
+  private Integer userId;
 
-  private Integer movieDTO;
+  private Integer movieId;
 }
