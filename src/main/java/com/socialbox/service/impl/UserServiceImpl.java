@@ -80,7 +80,7 @@ public class UserServiceImpl implements UserService {
     Optional<User> userOptional = this.userRepository.findByName(userDTO.getEmail());
 
     if (!userOptional.isPresent()) {
-      log.error("User not found with id: {}", userDTO.getId());
+      log.error("Creating new user: {}", userDTO.getId());
       User save = this.userRepository.save(User.builder()
           .userId(userDTO.getId())
           .name(userDTO.getName())

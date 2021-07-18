@@ -5,6 +5,7 @@ import com.socialbox.dto.UserMovieDTO;
 import com.socialbox.service.UserService;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -41,8 +42,11 @@ public class UserController {
 
   @PostMapping
   public ResponseEntity<UserDTO> saveUser(@RequestBody UserDTO user) {
-
     UserDTO createdUser = this.userService.loginUser(user);
+
+    if (createdUser.getGroups() == null) {
+      return ResponseEntity.status(HttpStatus.CREATED).body(createdUser);
+    }
 
     return ResponseEntity.ok(createdUser);
   }
