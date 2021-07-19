@@ -55,6 +55,7 @@ public class GroupServiceImpl implements GroupService {
               .id(group.getId())
               .name(group.getName())
               .photoURL(group.getPhotoURL())
+              .adminId(group.getAdmin().getUserId())
               .memberCount(group.getMemberCount())
               .build();
       groupDTOList.add(groupDTO);
