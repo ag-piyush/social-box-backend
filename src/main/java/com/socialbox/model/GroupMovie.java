@@ -1,6 +1,8 @@
 package com.socialbox.model;
 
-import java.util.List;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+import java.util.Set;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -16,14 +18,15 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
 @Entity
-@Table(name = "group_movie")
-// Todo: This entity is not being stored separately
+@Table(name = "group_movie") // Todo: This entity is not being stored separately
+@JsonIdentityInfo(generator = ObjectIdGenerators.IntSequenceGenerator.class)
 public class GroupMovie {
 
   @Id
@@ -32,7 +35,7 @@ public class GroupMovie {
   private Integer id;
 
   @OneToMany(targetEntity = Review.class, mappedBy = "groupMovie", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-  private List<Review> reviews;
+  private Set<Review> reviews;
 
   @Column(name = "name", nullable = false)
   private String name;
@@ -48,5 +51,6 @@ public class GroupMovie {
 
   @ManyToOne
   @JoinColumn(name = "groups_id", nullable = false)
+  @ToString.Exclude
   private Group group;
 }

@@ -1,19 +1,20 @@
 package com.socialbox.service;
 
 import com.socialbox.dto.MovieDTO;
-import com.socialbox.model.Movie;
-
+import com.socialbox.enums.Genre;
 import java.util.List;
 
 public interface MovieService {
 
-  List<MovieDTO> getAllMovies();
+  List<MovieDTO> getAllMovies(Genre movies);
 
-  List<Movie> getMoviesByIds(List<Integer> movieIds);
+  List<MovieDTO> getMoviesByIds(List<Integer> movieIds);
 
-  Movie getMovie(Integer id);
+  MovieDTO getMovie(Integer id);
 
-  Movie saveMovie(Movie movie);
+  MovieDTO saveMovie(MovieDTO movie);
 
-  List<Movie> searchMovie(String name);
+  List<MovieDTO> searchMovie(String name);
+
+  List<MovieDTO> searchMovieByGenre(Genre genre, String name);
 }

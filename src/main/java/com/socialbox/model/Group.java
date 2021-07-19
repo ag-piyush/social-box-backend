@@ -2,6 +2,7 @@ package com.socialbox.model;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+import java.util.Set;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -18,9 +19,9 @@ import javax.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
-
-import java.util.List;
+import lombok.ToString;
 
 @Data
 @NoArgsConstructor
@@ -28,7 +29,7 @@ import java.util.List;
 @Builder
 @Entity
 @Table(name = "room")
-@JsonIdentityInfo(generator = ObjectIdGenerators.IntSequenceGenerator.class)
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, scope = Group.class, property = "id")
 public class Group {
 
   @Id
@@ -45,8 +46,9 @@ public class Group {
   @Column(name = "photo_url")
   private String photoURL;
 
-  @OneToMany(targetEntity = GroupMovie.class, mappedBy = "group", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-  private List<GroupMovie> movieList;
+  @OneToMany(targetEntity = GroupMovie.class, mappedBy = "group", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+  @ToString.Exclude
+  private Set<GroupMovie> movieList;
 
   @ManyToMany(fetch = FetchType.LAZY,
       cascade = CascadeType.ALL)
@@ -54,12 +56,16 @@ public class Group {
       name = "user_groups",
       joinColumns = @JoinColumn(name = "groups_id"),
       inverseJoinColumns = @JoinColumn(name = "users_id"))
-  private List<User> users;
+  @ToString.Exclude
+  @EqualsAndHashCode.Exclude
+  private Set<User> users;
 
   @ManyToOne(cascade = {
       CascadeType.MERGE,
       CascadeType.REFRESH
   })
   @JoinColumn(name = "admin_id", nullable = false)
+  @ToString.Exclude
+  @EqualsAndHashCode.Exclude
   private User admin;
 }

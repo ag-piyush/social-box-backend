@@ -2,6 +2,7 @@ package com.socialbox.model;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+import java.util.Set;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -15,17 +16,18 @@ import javax.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
-import java.util.List;
+import lombok.ToString;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
 @Entity
-@Table(name = "user")
-@JsonIdentityInfo(generator = ObjectIdGenerators.IntSequenceGenerator.class)
+@Table(name = "users")
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "userId", scope = User.class)
 public class User {
 
   @Id
@@ -33,8 +35,11 @@ public class User {
   @Column(name = "id", nullable = false)
   private Integer userId;
 
-  @Column(name = "name", nullable = false, unique = true)
+  @Column(name = "name", nullable = false)
   private String name;
+
+  @Column(name = "display_name", unique = true)
+  private String displayName;
 
   @Column(name = "photo_url")
   private String photoURL;
@@ -43,16 +48,22 @@ public class User {
   private String email;
 
   @OneToMany(targetEntity = UserRatings.class, mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-  private List<UserRatings> personalMovieList;
+  @EqualsAndHashCode.Exclude
+  private Set<UserRatings> personalMovieList;
 
   @OneToMany(targetEntity = Movie.class, mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-  private List<Movie> sharedMovieList;
+  @EqualsAndHashCode.Exclude
+  private Set<Movie> sharedMovieList;
 
   @ManyToMany(fetch = FetchType.LAZY,
       cascade = CascadeType.ALL,
       mappedBy = "users")
-  private List<Group> groups;
+  @ToString.Exclude
+  @EqualsAndHashCode.Exclude
+  private Set<Group> groups;
 
   @OneToMany(targetEntity = Group.class, mappedBy = "admin", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-  private List<Group> owningGroup;
+  @ToString.Exclude
+  @EqualsAndHashCode.Exclude
+  private Set<Group> owningGroup;
 }

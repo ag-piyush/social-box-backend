@@ -1,7 +1,10 @@
 package com.socialbox.model;
 
 import com.socialbox.enums.Genre;
+import java.util.List;
+import java.util.Set;
 import javax.persistence.CascadeType;
+import javax.persistence.CollectionTable;
 import javax.persistence.Column;
 import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
@@ -18,9 +21,8 @@ import javax.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
-
-import java.util.List;
 
 @Data
 @NoArgsConstructor
@@ -49,13 +51,15 @@ public class Movie {
 
   @Enumerated(EnumType.STRING)
   @ElementCollection(targetClass = Genre.class)
+  @CollectionTable(name = "Movie_genre", joinColumns = @JoinColumn(name = "movie_id"))
   private List<Genre> genre;
 
-  @Column(name = "tmdb_id", nullable = false)
+  @Column(name = "tmdb_id")
   private String tmdbId;
 
   @OneToMany(targetEntity = Review.class, mappedBy = "movie", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-  private List<Review> reviews;
+  @EqualsAndHashCode.Exclude
+  private Set<Review> reviews;
 
   @ManyToOne
   @JoinColumn(name = "user_id")

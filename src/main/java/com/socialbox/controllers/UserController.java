@@ -1,10 +1,11 @@
 package com.socialbox.controllers;
 
+import com.socialbox.dto.UserDTO;
 import com.socialbox.dto.UserMovieDTO;
-import com.socialbox.model.User;
 import com.socialbox.service.UserService;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -25,14 +26,14 @@ public class UserController {
   }
 
   @GetMapping
-  public List<User> getAllUsers() {
-    return this.userService.getAllUsers();
+  public ResponseEntity<List<UserDTO>> getAllUsers() {
+    return ResponseEntity.ok(this.userService.getAllUsers());
   }
 
   @GetMapping("/{id}")
-  public ResponseEntity<User> getUserById(@PathVariable("id") Integer id) {
+  public ResponseEntity<UserDTO> getUserById(@PathVariable("id") Integer id) {
 
-    User foundUser = this.userService.getUserById(id);
+    UserDTO foundUser = this.userService.getUserById(id);
 
     if (foundUser == null) return ResponseEntity.status(401).build();
 
@@ -40,9 +41,12 @@ public class UserController {
   }
 
   @PostMapping
-  public ResponseEntity<User> saveUser(@RequestBody User user) {
+  public ResponseEntity<UserDTO> saveUser(@RequestBody UserDTO user) {
+    UserDTO createdUser = this.userService.loginUser(user);
 
-    User createdUser = this.userService.loginUser(user);
+    if (createdUser.getDisplayName() == null || createdUser.getDisplayName().isEmpty()) {
+      return ResponseEntity.status(HttpStatus.CREATED).body(createdUser);
+    }
 
     return ResponseEntity.ok(createdUser);
   }
@@ -55,5 +59,15 @@ public class UserController {
     if (movieDTOS == null) return ResponseEntity.status(401).build();
 
     return ResponseEntity.ok(movieDTOS);
+  }
+
+  @PostMapping("/{id}/settings")
+  public ResponseEntity<UserDTO> updateSettingsForUser(@PathVariable("id") Integer id, @RequestBody UserDTO userDTO) {
+    UserDTO updatedUserDTO = this.userService.saveSettingsForUser(userDTO, id);
+    if (updatedUserDTO == null) {
+      return ResponseEntity.badRequest().build();
+    }
+
+    return ResponseEntity.ok(updatedUserDTO);
   }
 }
