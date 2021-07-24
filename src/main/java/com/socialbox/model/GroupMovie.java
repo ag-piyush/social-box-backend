@@ -14,11 +14,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
+
+import lombok.*;
 
 @Data
 @NoArgsConstructor
@@ -35,6 +32,7 @@ public class GroupMovie {
   private Integer id;
 
   @OneToMany(targetEntity = Review.class, mappedBy = "groupMovie", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+  @EqualsAndHashCode.Exclude
   private Set<Review> reviews;
 
   @Column(name = "name", nullable = false)

@@ -48,6 +48,7 @@ public class Group {
 
   @OneToMany(targetEntity = GroupMovie.class, mappedBy = "group", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
   @ToString.Exclude
+  @EqualsAndHashCode.Exclude
   private Set<GroupMovie> movieList;
 
   @ManyToMany(fetch = FetchType.LAZY,
