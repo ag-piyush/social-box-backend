@@ -1,9 +1,6 @@
 package com.socialbox.service.impl;
 
-import com.socialbox.dto.GroupDTO;
-import com.socialbox.dto.GroupMovieDTO;
-import com.socialbox.dto.InviteDTO;
-import com.socialbox.dto.ReviewDTO;
+import com.socialbox.dto.*;
 import com.socialbox.model.Group;
 import com.socialbox.model.GroupMovie;
 import com.socialbox.model.InviteLink;
@@ -281,5 +278,49 @@ public class GroupServiceImpl implements GroupService {
                             .collect(Collectors.toList()))
                     .build())
         .collect(Collectors.toList());
+  }
+
+  @Override
+  public List<UserDTO> getAllUsers(Integer id) {
+    Optional<Group> groupOptional = this.groupRepository.findById(id);
+
+    if (!groupOptional.isPresent()) {
+      log.debug("Group not found id: {}", id);
+      return null;
+    }
+
+    Group group = groupOptional.get();
+    Set<User> users = group.getUsers();
+
+    List<UserDTO> userDTOS = new ArrayList<>();
+
+    for (User user : users) {
+      UserDTO userDTO =
+          UserDTO.builder()
+              .id(user.getUserId())
+              .name(user.getName())
+              .displayName(user.getDisplayName())
+              .email(user.getEmail())
+              .photoURL(user.getPhotoURL())
+              .personalMovieList(
+                  this.userService.userRatingsToUserRatingsDTO(user.getPersonalMovieList()))
+              .groups(
+                  user.getGroups().stream()
+                      .map(
+                          m ->
+                              GroupDTO.builder()
+                                  .id(m.getId())
+                                  .name(m.getName())
+                                  .photoURL(m.getPhotoURL())
+                                  .memberCount(m.getMemberCount())
+                                  .adminId(m.getAdmin().getUserId())
+                                  .groupMovieDTOList(
+                                      this.groupMovieTOGroupMovieDTO(m.getMovieList()))
+                                  .build())
+                      .collect(Collectors.toList()))
+              .build();
+      userDTOS.add(userDTO);
+    }
+    return userDTOS;
   }
 }

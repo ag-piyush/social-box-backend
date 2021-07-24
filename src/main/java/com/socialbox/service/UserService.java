@@ -3,8 +3,12 @@ package com.socialbox.service;
 import com.socialbox.dto.GroupDTO;
 import com.socialbox.dto.UserDTO;
 import com.socialbox.dto.UserMovieDTO;
+import com.socialbox.dto.UserRatingsDTO;
 import com.socialbox.model.User;
+import com.socialbox.model.UserRatings;
+
 import java.util.List;
+import java.util.Set;
 
 public interface UserService {
 
@@ -23,4 +27,6 @@ public interface UserService {
   UserDTO saveSettingsForUser(UserDTO userDTO, Integer id);
 
   List<GroupDTO> getAllGroups(Integer id);
+
+  List<UserRatingsDTO> userRatingsToUserRatingsDTO(Set<UserRatings> userRatings);
 }

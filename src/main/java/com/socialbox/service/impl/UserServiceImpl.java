@@ -1,11 +1,9 @@
 package com.socialbox.service.impl;
 
-import com.socialbox.dto.GroupDTO;
-import com.socialbox.dto.MovieDTO;
-import com.socialbox.dto.UserDTO;
-import com.socialbox.dto.UserMovieDTO;
+import com.socialbox.dto.*;
 import com.socialbox.model.Group;
 import com.socialbox.model.User;
+import com.socialbox.model.UserRatings;
 import com.socialbox.repository.UserRepository;
 import com.socialbox.service.GroupService;
 import com.socialbox.service.MovieService;
@@ -211,5 +209,19 @@ public class UserServiceImpl implements UserService {
     }
 
     return groupDTOS;
+  }
+
+  @Override
+  public List<UserRatingsDTO> userRatingsToUserRatingsDTO(Set<UserRatings> userRatings) {
+    return userRatings.stream()
+        .map(
+            m ->
+                UserRatingsDTO.builder()
+                    .id(m.getId())
+                    .ratings(m.getRatings())
+                    .userId(m.getUser().getUserId())
+                    .movieId(m.getMovie().getId())
+                    .build())
+        .collect(Collectors.toList());
   }
 }
