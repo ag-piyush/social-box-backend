@@ -210,8 +210,8 @@ public class GroupServiceImpl implements GroupService {
     group = this.updateGroup(group);
 
     return GroupDTO.builder()
-        .id(groupId)
-        .adminId(userId)
+        .id(group.getId())
+        .adminId(group.getAdmin().getUserId())
         .memberCount(group.getMemberCount())
         .photoURL(group.getPhotoURL())
         .groupMovieDTOList(groupMovieTOGroupMovieDTO(group.getMovieList()))
