@@ -197,7 +197,7 @@ public class GroupServiceImpl implements GroupService {
     }
     Group group = groupOptional.get();
     user.getGroups().add(group);
-    this.userService.updateUser(user);
+    user = this.userService.updateUser(user);
 
     if (group.getUsers() == null) {
       log.info("Creating a new userList for group: {}", groupId);
