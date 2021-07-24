@@ -1,9 +1,6 @@
 package com.socialbox.service;
 
-import com.socialbox.dto.GroupDTO;
-import com.socialbox.dto.UserDTO;
-import com.socialbox.dto.UserMovieDTO;
-import com.socialbox.dto.UserRatingsDTO;
+import com.socialbox.dto.*;
 import com.socialbox.model.User;
 import com.socialbox.model.UserRatings;
 
@@ -29,4 +26,6 @@ public interface UserService {
   List<GroupDTO> getAllGroups(Integer id);
 
   List<UserRatingsDTO> userRatingsToUserRatingsDTO(Set<UserRatings> userRatings);
+
+  UserDTO addMovieToUser(Integer userId, Integer movieId);
 }

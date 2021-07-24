@@ -1,5 +1,6 @@
 package com.socialbox.service.impl;
 
+import com.socialbox.repository.MovieRepository;
 import com.socialbox.repository.UserRepository;
 import com.socialbox.service.GroupService;
 import com.socialbox.service.MovieService;
@@ -13,12 +14,13 @@ import org.mockito.junit.jupiter.MockitoExtension;
 class UserServiceTest {
 
   @Mock UserRepository userRepository;
+  MovieRepository movieRepository;
   MovieService movieService;
   UserService userService;
   GroupService groupService;
 
   @BeforeEach
   void setUp() {
-    userService = new UserServiceImpl(userRepository, movieService, groupService);
+    userService = new UserServiceImpl(userRepository, movieService, groupService, movieRepository);
   }
 }

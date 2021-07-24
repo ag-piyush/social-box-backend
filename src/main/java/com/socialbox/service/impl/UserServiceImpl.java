@@ -2,16 +2,16 @@ package com.socialbox.service.impl;
 
 import com.socialbox.dto.*;
 import com.socialbox.model.Group;
+import com.socialbox.model.Movie;
 import com.socialbox.model.User;
 import com.socialbox.model.UserRatings;
+import com.socialbox.repository.MovieRepository;
 import com.socialbox.repository.UserRepository;
 import com.socialbox.service.GroupService;
 import com.socialbox.service.MovieService;
 import com.socialbox.service.UserService;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+
+import java.util.*;
 import java.util.stream.Collectors;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,13 +22,18 @@ import org.springframework.stereotype.Service;
 public class UserServiceImpl implements UserService {
 
   private final UserRepository userRepository;
+  private final MovieRepository movieRepository;
   private final MovieService movieService;
   private final GroupService groupService;
 
   @Autowired
   public UserServiceImpl(
-      UserRepository userRepository, MovieService movieService, GroupService groupService) {
+      UserRepository userRepository,
+      MovieService movieService,
+      GroupService groupService,
+      MovieRepository movieRepository) {
     this.userRepository = userRepository;
+    this.movieRepository = movieRepository;
     this.movieService = movieService;
     this.groupService = groupService;
   }
@@ -223,5 +228,54 @@ public class UserServiceImpl implements UserService {
                     .movieId(m.getMovie().getId())
                     .build())
         .collect(Collectors.toList());
+  }
+
+  @Override
+  public UserDTO addMovieToUser(Integer userId, Integer movieId) {
+    Optional<Movie> movieOptional = this.movieRepository.findById(movieId);
+    if (!movieOptional.isPresent()) {
+      log.error("Invalid movieId: {}", movieId);
+      return null;
+    }
+
+    Optional<User> userOptional = this.userRepository.findById(userId);
+    if (!userOptional.isPresent()) {
+      log.error("Invalid userId: {}", userId);
+      return null;
+    }
+
+    Movie movie = movieOptional.get();
+    User user = userOptional.get();
+
+    if (user.getSharedMovieList() == null) {
+      log.info("Creating a new sharedMovieList for user: {}", userId);
+      user.setSharedMovieList(new HashSet<>());
+    }
+
+    user.getSharedMovieList().add(movie);
+    user = this.updateUser(user);
+
+    return UserDTO.builder()
+        .id(user.getUserId())
+        .name(user.getName())
+        .displayName(user.getDisplayName())
+        .email(user.getEmail())
+        .photoURL(user.getPhotoURL())
+        .personalMovieList(userRatingsToUserRatingsDTO(user.getPersonalMovieList()))
+        .groups(
+            user.getGroups().stream()
+                .map(
+                    m ->
+                        GroupDTO.builder()
+                            .id(m.getId())
+                            .name(m.getName())
+                            .adminId(m.getAdmin().getUserId())
+                            .memberCount(m.getMemberCount())
+                            .photoURL(m.getPhotoURL())
+                            .groupMovieDTOList(
+                                this.groupService.groupMovieTOGroupMovieDTO(m.getMovieList()))
+                            .build())
+                .collect(Collectors.toList()))
+        .build();
   }
 }
