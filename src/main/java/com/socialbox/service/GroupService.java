@@ -3,7 +3,10 @@ package com.socialbox.service;
 import com.socialbox.dto.GroupDTO;
 import com.socialbox.dto.GroupMovieDTO;
 import com.socialbox.dto.InviteDTO;
+import com.socialbox.model.GroupMovie;
+
 import java.util.List;
+import java.util.Set;
 
 public interface GroupService {
   List<GroupDTO> getAllGroups(List<Integer> groupIds);
@@ -19,4 +22,6 @@ public interface GroupService {
   GroupDTO addUserToGroup(Integer groupId, Integer userId);
 
   GroupDTO removeUserFromGroup(Integer groupId, Integer userId);
+
+  List<GroupMovieDTO> groupMovieTOGroupMovieDTO(Set<GroupMovie> groupMovies);
 }

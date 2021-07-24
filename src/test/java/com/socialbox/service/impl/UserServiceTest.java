@@ -1,6 +1,7 @@
 package com.socialbox.service.impl;
 
 import com.socialbox.repository.UserRepository;
+import com.socialbox.service.GroupService;
 import com.socialbox.service.MovieService;
 import com.socialbox.service.UserService;
 import org.junit.jupiter.api.BeforeEach;
@@ -14,9 +15,10 @@ class UserServiceTest {
   @Mock UserRepository userRepository;
   MovieService movieService;
   UserService userService;
+  GroupService groupService;
 
   @BeforeEach
   void setUp() {
-    userService = new UserServiceImpl(userRepository, movieService);
+    userService = new UserServiceImpl(userRepository, movieService, groupService);
   }
 }

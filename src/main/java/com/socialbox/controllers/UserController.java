@@ -1,5 +1,6 @@
 package com.socialbox.controllers;
 
+import com.socialbox.dto.GroupDTO;
 import com.socialbox.dto.UserDTO;
 import com.socialbox.dto.UserMovieDTO;
 import com.socialbox.service.UserService;
@@ -62,12 +63,23 @@ public class UserController {
   }
 
   @PostMapping("/{id}/settings")
-  public ResponseEntity<UserDTO> updateSettingsForUser(@PathVariable("id") Integer id, @RequestBody UserDTO userDTO) {
+  public ResponseEntity<UserDTO> updateSettingsForUser(
+      @PathVariable("id") Integer id, @RequestBody UserDTO userDTO) {
     UserDTO updatedUserDTO = this.userService.saveSettingsForUser(userDTO, id);
     if (updatedUserDTO == null) {
       return ResponseEntity.badRequest().build();
     }
 
     return ResponseEntity.ok(updatedUserDTO);
+  }
+
+  @GetMapping("/{id}/groups")
+  public ResponseEntity<List<GroupDTO>> getAllGroups(@PathVariable("id") Integer id) {
+    List<GroupDTO> groupDTOList = this.userService.getAllGroups(id);
+    if (groupDTOList == null) {
+      return ResponseEntity.badRequest().build();
+    }
+
+    return ResponseEntity.ok(groupDTOList);
   }
 }

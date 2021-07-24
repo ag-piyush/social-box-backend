@@ -34,9 +34,11 @@ public class GroupServiceImpl implements GroupService {
   private final InviteLinkService inviteLinkService;
 
   @Autowired
-  public GroupServiceImpl(GroupMovieRepository groupMovieRepository,
+  public GroupServiceImpl(
+      GroupMovieRepository groupMovieRepository,
       GroupRepository groupRepository,
-      UserService userService, InviteLinkService inviteLinkService) {
+      UserService userService,
+      InviteLinkService inviteLinkService) {
     this.groupMovieRepository = groupMovieRepository;
     this.groupRepository = groupRepository;
     this.userService = userService;
@@ -72,28 +74,7 @@ public class GroupServiceImpl implements GroupService {
     }
 
     Group group = groupOptional.get();
-    List<GroupMovieDTO> groupMovieDTOS = group.getMovieList()
-        .stream()
-        .map(m -> GroupMovieDTO.builder()
-            .id(m.getId())
-            .groupId(m.getGroup().getId())
-            .name(m.getName())
-            .photoURL(m.getPhotoURL())
-            .rating(m.getRating())
-            .votes(m.getVotes())
-            .reviews(
-                m.getReviews()
-                    .stream()
-                    .map(r -> ReviewDTO.builder()
-                        .userReviews(r.getUserReviews())
-                        .groupMovieId(r.getGroupMovie().getId())
-                        .movieId(r.getMovie().getId())
-                        .id(r.getId())
-                        .build())
-                    .collect(Collectors.toList())
-            )
-            .build())
-        .collect(Collectors.toList());
+    List<GroupMovieDTO> groupMovieDTOS = groupMovieTOGroupMovieDTO(group.getMovieList());
     return GroupDTO.builder()
         .id(group.getId())
         .memberCount(group.getMemberCount())
@@ -113,12 +94,14 @@ public class GroupServiceImpl implements GroupService {
     }
 
     log.info("Fetched admin: {}", admin);
-    Group group = this.groupRepository.save(Group.builder()
-        .memberCount(groupDTO.getMemberCount())
-        .name(groupDTO.getName())
-        .users(Collections.singleton(admin))
-        .admin(admin)
-        .build());
+    Group group =
+        this.groupRepository.save(
+            Group.builder()
+                .memberCount(groupDTO.getMemberCount())
+                .name(groupDTO.getName())
+                .users(Collections.singleton(admin))
+                .admin(admin)
+                .build());
     Set<Group> groups = admin.getGroups();
     if (groups == null) {
       admin.setGroups(new HashSet<>());
@@ -152,15 +135,19 @@ public class GroupServiceImpl implements GroupService {
       currentGroup.setMovieList(new HashSet<>());
     }
 
-    List<GroupMovie> groupMovies = this.groupMovieRepository.saveAll(groupMovieDTOS.stream()
-        .map(gM -> GroupMovie.builder()
-            .name(gM.getName())
-            .photoURL(gM.getPhotoURL())
-            .rating(gM.getRating())
-            .votes(gM.getVotes())
-            .group(currentGroup)
-            .build())
-        .collect(Collectors.toList()));
+    List<GroupMovie> groupMovies =
+        this.groupMovieRepository.saveAll(
+            groupMovieDTOS.stream()
+                .map(
+                    gM ->
+                        GroupMovie.builder()
+                            .name(gM.getName())
+                            .photoURL(gM.getPhotoURL())
+                            .rating(gM.getRating())
+                            .votes(gM.getVotes())
+                            .group(currentGroup)
+                            .build())
+                .collect(Collectors.toList()));
     currentGroup.getMovieList().addAll(groupMovies);
     log.info("Movie added to group: {}", groupMovies);
     updateGroup(currentGroup);
@@ -227,27 +214,7 @@ public class GroupServiceImpl implements GroupService {
         .adminId(userId)
         .memberCount(group.getMemberCount())
         .photoURL(group.getPhotoURL())
-        .groupMovieDTOList(
-            group.getMovieList()
-                .stream()
-                .map(gM -> GroupMovieDTO.builder()
-                    .id(gM.getId())
-                    .groupId(gM.getGroup().getId())
-                    .votes(gM.getVotes())
-                    .name(gM.getName())
-                    .rating(gM.getRating())
-                    .reviews(gM.getReviews()
-                        .stream()
-                        .map(r -> ReviewDTO.builder()
-                            .id(r.getId())
-                            .userReviews(r.getUserReviews())
-                            .movieId(r.getMovie().getId())
-                            .groupMovieId(r.getGroupMovie().getId())
-                            .build())
-                        .collect(
-                            Collectors.toList()))
-                    .build())
-                .collect(Collectors.toList()))
+        .groupMovieDTOList(groupMovieTOGroupMovieDTO(group.getMovieList()))
         .build();
   }
 
@@ -285,27 +252,34 @@ public class GroupServiceImpl implements GroupService {
         .adminId(userId)
         .memberCount(group.getMemberCount())
         .photoURL(group.getPhotoURL())
-        .groupMovieDTOList(
-            group.getMovieList()
-                .stream()
-                .map(gM -> GroupMovieDTO.builder()
-                    .id(gM.getId())
-                    .groupId(gM.getGroup().getId())
-                    .votes(gM.getVotes())
-                    .name(gM.getName())
-                    .rating(gM.getRating())
-                    .reviews(gM.getReviews()
-                        .stream()
-                        .map(r -> ReviewDTO.builder()
-                            .id(r.getId())
-                            .userReviews(r.getUserReviews())
-                            .movieId(r.getMovie().getId())
-                            .groupMovieId(r.getGroupMovie().getId())
-                            .build())
-                        .collect(
-                            Collectors.toList()))
-                    .build())
-                .collect(Collectors.toList()))
+        .groupMovieDTOList(groupMovieTOGroupMovieDTO(group.getMovieList()))
         .build();
+  }
+
+  @Override
+  public List<GroupMovieDTO> groupMovieTOGroupMovieDTO(Set<GroupMovie> groupMovies) {
+    return groupMovies.stream()
+        .map(
+            m ->
+                GroupMovieDTO.builder()
+                    .id(m.getId())
+                    .groupId(m.getGroup().getId())
+                    .name(m.getName())
+                    .photoURL(m.getPhotoURL())
+                    .rating(m.getRating())
+                    .votes(m.getVotes())
+                    .reviews(
+                        m.getReviews().stream()
+                            .map(
+                                r ->
+                                    ReviewDTO.builder()
+                                        .userReviews(r.getUserReviews())
+                                        .groupMovieId(r.getGroupMovie().getId())
+                                        .movieId(r.getMovie().getId())
+                                        .id(r.getId())
+                                        .build())
+                            .collect(Collectors.toList()))
+                    .build())
+        .collect(Collectors.toList());
   }
 }

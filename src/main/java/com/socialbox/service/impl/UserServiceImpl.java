@@ -1,18 +1,19 @@
 package com.socialbox.service.impl;
 
 import com.socialbox.dto.GroupDTO;
-import com.socialbox.dto.GroupMovieDTO;
 import com.socialbox.dto.MovieDTO;
-import com.socialbox.dto.ReviewDTO;
 import com.socialbox.dto.UserDTO;
 import com.socialbox.dto.UserMovieDTO;
+import com.socialbox.model.Group;
 import com.socialbox.model.User;
 import com.socialbox.repository.UserRepository;
+import com.socialbox.service.GroupService;
 import com.socialbox.service.MovieService;
 import com.socialbox.service.UserService;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Collectors;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,24 +25,28 @@ public class UserServiceImpl implements UserService {
 
   private final UserRepository userRepository;
   private final MovieService movieService;
+  private final GroupService groupService;
 
   @Autowired
-  public UserServiceImpl(UserRepository userRepository, MovieService movieService) {
+  public UserServiceImpl(
+      UserRepository userRepository, MovieService movieService, GroupService groupService) {
     this.userRepository = userRepository;
     this.movieService = movieService;
+    this.groupService = groupService;
   }
 
   @Override
   public List<UserDTO> getAllUsers() {
-    return this.userRepository.findAll()
-        .stream()
-        .map(u -> UserDTO.builder()
-            .id(u.getUserId())
-            .name(u.getName())
-            .displayName(u.getDisplayName())
-            .email(u.getEmail())
-            .photoURL(u.getPhotoURL())
-            .build())
+    return this.userRepository.findAll().stream()
+        .map(
+            u ->
+                UserDTO.builder()
+                    .id(u.getUserId())
+                    .name(u.getName())
+                    .displayName(u.getDisplayName())
+                    .email(u.getEmail())
+                    .photoURL(u.getPhotoURL())
+                    .build())
         .collect(Collectors.toList());
   }
 
@@ -81,12 +86,14 @@ public class UserServiceImpl implements UserService {
 
     if (!userOptional.isPresent()) {
       log.debug("Creating new user: {}", userDTO.getId());
-      User save = this.userRepository.save(User.builder()
-          .userId(userDTO.getId())
-          .name(userDTO.getName())
-          .email(userDTO.getEmail())
-          .photoURL(userDTO.getPhotoURL())
-          .build());
+      User save =
+          this.userRepository.save(
+              User.builder()
+                  .userId(userDTO.getId())
+                  .name(userDTO.getName())
+                  .email(userDTO.getEmail())
+                  .photoURL(userDTO.getPhotoURL())
+                  .build());
       userDTO.setId(save.getUserId());
       return userDTO;
     }
@@ -98,33 +105,19 @@ public class UserServiceImpl implements UserService {
         .displayName(user.getDisplayName())
         .email(user.getEmail())
         .photoURL(user.getPhotoURL())
-        .groups(user.getGroups().stream().map(g -> GroupDTO.builder()
-            .id(g.getId())
-            .adminId(g.getAdmin().getUserId())
-            .memberCount(g.getMemberCount())
-            .photoURL(g.getPhotoURL())
-            .groupMovieDTOList(
-                g.getMovieList()
-                    .stream()
-                    .map(gM -> GroupMovieDTO.builder()
-                        .id(gM.getId())
-                        .groupId(gM.getGroup().getId())
-                        .votes(gM.getVotes())
-                        .name(gM.getName())
-                        .rating(gM.getRating())
-                        .reviews(gM.getReviews()
-                            .stream()
-                            .map(r -> ReviewDTO.builder()
-                                .id(r.getId())
-                                .userReviews(r.getUserReviews())
-                                .movieId(r.getMovie().getId())
-                                .groupMovieId(r.getGroupMovie().getId())
-                                .build())
-                            .collect(
-                                Collectors.toList()))
-                        .build())
-                    .collect(Collectors.toList()))
-            .build()).collect(Collectors.toList()))
+        .groups(
+            user.getGroups().stream()
+                .map(
+                    g ->
+                        GroupDTO.builder()
+                            .id(g.getId())
+                            .adminId(g.getAdmin().getUserId())
+                            .memberCount(g.getMemberCount())
+                            .photoURL(g.getPhotoURL())
+                            .groupMovieDTOList(
+                                this.groupService.groupMovieTOGroupMovieDTO(g.getMovieList()))
+                            .build())
+                .collect(Collectors.toList()))
         .build();
   }
 
@@ -139,10 +132,10 @@ public class UserServiceImpl implements UserService {
     }
 
     List<MovieDTO> movieList =
-        this.movieService.getMoviesByIds(currentUser.getPersonalMovieList()
-            .stream()
-            .map(userRatings -> userRatings.getMovie().getId())
-            .collect(Collectors.toList()));
+        this.movieService.getMoviesByIds(
+            currentUser.getPersonalMovieList().stream()
+                .map(userRatings -> userRatings.getMovie().getId())
+                .collect(Collectors.toList()));
     List<UserMovieDTO> movieDTOS = new ArrayList<>();
 
     for (MovieDTO movie : movieList) {
@@ -163,11 +156,13 @@ public class UserServiceImpl implements UserService {
     return movieDTOS;
   }
 
-  @Override public User updateUser(User user) {
+  @Override
+  public User updateUser(User user) {
     return this.userRepository.save(user);
   }
 
-  @Override public UserDTO saveSettingsForUser(UserDTO userDTO, Integer id) {
+  @Override
+  public UserDTO saveSettingsForUser(UserDTO userDTO, Integer id) {
     Optional<User> userOptional = this.userRepository.findById(id);
     if (!userOptional.isPresent()) {
       log.debug("User not found with id: {}", id);
@@ -186,5 +181,35 @@ public class UserServiceImpl implements UserService {
     }
 
     return userDTO;
+  }
+
+  @Override
+  public List<GroupDTO> getAllGroups(Integer id) {
+    Optional<User> userOptional = this.userRepository.findById(id);
+    if (!userOptional.isPresent()) {
+      log.debug("User not found with id: {}", id);
+      return null;
+    }
+
+    User user = userOptional.get();
+
+    Set<Group> groupSet = user.getGroups();
+    List<GroupDTO> groupDTOS = new ArrayList<>();
+
+    for (Group group : groupSet) {
+      GroupDTO groupDTO =
+          GroupDTO.builder()
+              .id(group.getId())
+              .name(group.getName())
+              .adminId(group.getAdmin().getUserId())
+              .memberCount(group.getMemberCount())
+              .photoURL(group.getPhotoURL())
+              .groupMovieDTOList(this.groupService.groupMovieTOGroupMovieDTO(group.getMovieList()))
+              .build();
+
+      groupDTOS.add(groupDTO);
+    }
+
+    return groupDTOS;
   }
 }

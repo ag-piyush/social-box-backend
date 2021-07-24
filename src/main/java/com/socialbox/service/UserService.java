@@ -1,5 +1,6 @@
 package com.socialbox.service;
 
+import com.socialbox.dto.GroupDTO;
 import com.socialbox.dto.UserDTO;
 import com.socialbox.dto.UserMovieDTO;
 import com.socialbox.model.User;
@@ -20,4 +21,6 @@ public interface UserService {
   User updateUser(User user);
 
   UserDTO saveSettingsForUser(UserDTO userDTO, Integer id);
+
+  List<GroupDTO> getAllGroups(Integer id);
 }
