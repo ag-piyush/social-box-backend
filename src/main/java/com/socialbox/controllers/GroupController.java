@@ -57,8 +57,8 @@ public class GroupController {
   }
 
   @GetMapping("/invite")
-  public ResponseEntity<InviteDTO> sendInvite(@RequestParam Integer groupId,
-      @RequestParam Integer userId) {
+  public ResponseEntity<InviteDTO> sendInvite(@RequestParam("groupId") Integer groupId,
+      @RequestParam("userId") Integer userId) {
     InviteDTO inviteDTO = this.groupService.sendInvite(groupId, userId);
 
     if (inviteDTO == null) {
